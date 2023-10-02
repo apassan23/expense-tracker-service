@@ -1,0 +1,11 @@
+name: Track Deployment
+on: [ pull_request ]:
+jobs:
+  deploy:
+    name: Wait for Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Render GitHub Action
+        uses: Bounceapp/render-action@0.7.1
+        with:
+          service-id: srv-ckdcbc6smu8c7381tl5g?key=5hrpHBRwfw0
