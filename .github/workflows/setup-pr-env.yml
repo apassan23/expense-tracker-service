@@ -92,7 +92,7 @@ jobs:
           # Alternate path for the user toolchains file
           # toolchains-file: # optional
           # Force the use of an alternate POM file (or directory with pom.xml)
-          # pom-file: # optional
+          pom-file: ../pom.xml
           # Defines a set of system properties in CSV or multiline format
           # system-properties: # optional
           # The CI-friendly revision property to use
