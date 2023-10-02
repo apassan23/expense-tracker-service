@@ -9,3 +9,4 @@ jobs:
         uses: Bounceapp/render-action@0.7.1
         with:
           service-id: srv-ckdcbc6smu8c7381tl5g?key=5hrpHBRwfw0
+          github-token: ${{ secrets.GITHUB_TOKEN }}
