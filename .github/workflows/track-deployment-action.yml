@@ -1,5 +1,5 @@
 name: Track Deployment
-on: [ pull_request ]:
+on: [ pull_request ]
 jobs:
   deploy:
     name: Wait for Deploy
