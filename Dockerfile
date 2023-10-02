@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM maven:3.9.4-eclipse-temurin-20-alpine AS build
+FROM maven:3.9.4-amazoncorretto-20-al2023 AS build
 COPY . .
 RUN mvn clean install
 
