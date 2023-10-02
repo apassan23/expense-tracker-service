@@ -60,10 +60,12 @@ jobs:
           maven-version: 3.9.4 # optional, default is 3.8.2
   
   maven-install:
-    name: Maven Clean Install
+    name: Maven clean install
     runs-on: ubuntu-latest
     needs: [ setup-java, setup-maven]
     steps:
+      - name: Echo file list
+        run: ls -lh
       - name: CI Maven
         # You may pin to the exact commit or the version.
         # uses: Best-Quality-Engineering/ci-maven-action@4bc4a4f9a59050271d907afee1ac7f03d171f431
