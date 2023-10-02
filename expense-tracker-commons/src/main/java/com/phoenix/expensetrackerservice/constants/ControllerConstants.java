@@ -17,4 +17,6 @@ public class ControllerConstants {
     public static final String CATEGORY_CHANGE_MAPPING = "/";
     public static final String CATEGORY_RETRIEVE_MAPPING = "/{categoryId}";
     public static final String CATEGORY_DELETE_MAPPING = "/{categoryId}";
+    public static final String ACTUATOR_INFO_ENDPOINT = "/actuator/info";
+    public static final String ACTUATOR_HEALTH_ENDPOINT = "/actuator/health";
 }

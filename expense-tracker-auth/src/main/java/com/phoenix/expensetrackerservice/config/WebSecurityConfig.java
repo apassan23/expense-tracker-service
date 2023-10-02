@@ -1,6 +1,7 @@
 package com.phoenix.expensetrackerservice.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.phoenix.expensetrackerservice.constants.AuthConstants;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.exception.response.ErrorType;
 import com.phoenix.expensetrackerservice.exception.response.ExpenseTrackerError;
@@ -35,6 +36,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
                     authorizationManagerRequestMatcherRegistry
+                            .requestMatchers(AuthConstants.API_WHITELIST).permitAll()
                             .anyRequest().authenticated();
                 })
                 .exceptionHandling(httpSecurityExceptionHandlingConfigurer -> {
