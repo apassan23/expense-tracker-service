@@ -40,7 +40,7 @@ public class BearerTokenFilter extends OncePerRequestFilter {
             Authentication authentication = tokenValidatorService.validateToken(authToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            LOGGER.error("Error occurred while extracting Auth Header", e);
+            LOGGER.warn("Error occurred while extracting Auth Header", e);
             SecurityContextHolder.clearContext();
         }
         filterChain.doFilter(request, response);
