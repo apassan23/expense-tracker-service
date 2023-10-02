@@ -5,7 +5,6 @@ jobs:
   setup-java:
     name: Setup Java
     runs-on: ubuntu-latest
-    concurrency: pr-env
     steps:
       - name: Setup Java JDK
         uses: actions/setup-java@v3.13.0
@@ -51,7 +50,6 @@ jobs:
   setup-maven:
     name: Setup Maven
     runs-on: ubuntu-latest
-    concurrency: pr-env
     steps:
       - name: Setup Maven
       # You may pin to the exact commit or the version.
@@ -64,7 +62,7 @@ jobs:
   maven-install:
     name: Maven Clean Install
     runs-on: ubuntu-latest
-    concurrency: pr-env
+    needs: [ setup-java, setup-maven]
     steps:
       - name: CI Maven
         # You may pin to the exact commit or the version.
