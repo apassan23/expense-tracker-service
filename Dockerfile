@@ -10,6 +10,6 @@ RUN mvn clean install
 #
 FROM amazoncorretto:20-alpine-jdk
 VOLUME /tmp
-COPY --from=build /target/*.jar app.jar
+COPY --from=build /usr/src/app/target/*.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 EXPOSE 8080
