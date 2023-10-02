@@ -8,6 +8,6 @@ jobs:
       - name: Render GitHub Action
         uses: Bounceapp/render-action@0.7.1
         with:
-          service-id: srv-ckdcbc6smu8c7381tl5g?key=5hrpHBRwfw0
+          service-id: srv-ckdcbc6smu8c7381tl5g
           github-token: ${{ secrets.GITHUB_TOKEN }}
           render-token: ${{ secrets.RENDER_TOKEN }}
