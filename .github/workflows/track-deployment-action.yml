@@ -1,5 +1,5 @@
 name: Track Deployment
-on: [ pull_request ]
+on: [ push ]
 jobs:
   deploy:
     name: Wait for Deploy
@@ -10,3 +10,4 @@ jobs:
         with:
           service-id: srv-ckdcbc6smu8c7381tl5g?key=5hrpHBRwfw0
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          render-token: ${{ secrets.RENDER_TOKEN }}
