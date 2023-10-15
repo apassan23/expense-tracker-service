@@ -6,7 +6,6 @@ import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.RetrieveTransactionDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.TransactionDataService;
-import com.phoenix.expensetrackerservice.strategy.RetrieveStrategy;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
 import com.phoenix.expensetrackerservice.transform.TransactionEntityBuilder;
 import org.springframework.stereotype.Component;
@@ -16,11 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RetrieveTransactionStrategy implements RetrieveStrategy {
+public class RetrieveTransactionTransactionStrategy implements com.phoenix.expensetrackerservice.strategy.RetrieveTransactionStrategy {
 
     private final TransactionDataService transactionDataService;
 
-    public RetrieveTransactionStrategy(TransactionDataService transactionDataService) {
+    public RetrieveTransactionTransactionStrategy(TransactionDataService transactionDataService) {
         this.transactionDataService = transactionDataService;
     }
 

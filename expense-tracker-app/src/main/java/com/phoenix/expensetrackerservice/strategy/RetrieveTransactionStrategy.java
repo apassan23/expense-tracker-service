@@ -5,7 +5,7 @@ import com.phoenix.expensetrackerservice.model.TransactionDTO;
 
 import java.util.List;
 
-public interface RetrieveStrategy {
+public interface RetrieveTransactionStrategy {
     List<TransactionDTO> retrieve(RetrieveTransactionDTO retrieveTransactionDTO);
 
     RetrieveType retrieveType();

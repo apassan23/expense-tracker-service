@@ -3,7 +3,7 @@ package com.phoenix.expensetrackerservice.service.impl;
 import com.phoenix.expensetrackerservice.model.RetrieveTransactionDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.RetrieveTransactionService;
-import com.phoenix.expensetrackerservice.strategy.RetrieveStrategy;
+import com.phoenix.expensetrackerservice.strategy.RetrieveTransactionStrategy;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
 import com.phoenix.expensetrackerservice.strategy.factory.RetrieveStrategyFactory;
 import org.springframework.stereotype.Service;
@@ -21,15 +21,15 @@ public class RetrieveTransactionServiceImpl implements RetrieveTransactionServic
 
     @Override
     public List<TransactionDTO> given(RetrieveTransactionDTO retrieveTransactionDTO) {
-        RetrieveStrategy retrieveStrategy;
+        RetrieveTransactionStrategy retrieveTransactionStrategy;
         if (Objects.nonNull(retrieveTransactionDTO.getTransactionId())) {
-            retrieveStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_SINGLE_TRANSACTION);
+            retrieveTransactionStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_SINGLE_TRANSACTION);
         } else if (retrieveTransactionDTO.isFetchAll()) {
-            retrieveStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_ALL);
+            retrieveTransactionStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_ALL);
         } else {
-            retrieveStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_BY_PAGE);
+            retrieveTransactionStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_BY_PAGE);
         }
 
-        return retrieveStrategy.retrieve(retrieveTransactionDTO);
+        return retrieveTransactionStrategy.retrieve(retrieveTransactionDTO);
     }
 }
