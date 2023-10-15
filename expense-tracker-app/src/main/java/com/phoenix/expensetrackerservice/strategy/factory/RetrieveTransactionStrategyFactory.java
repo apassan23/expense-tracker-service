@@ -11,11 +11,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
-public class RetrieveStrategyFactory {
+public class RetrieveTransactionStrategyFactory {
 
     private final Map<RetrieveType, RetrieveTransactionStrategy> retrieveStrategyMap;
 
-    public RetrieveStrategyFactory(List<RetrieveTransactionStrategy> retrieveStrategies) {
+    public RetrieveTransactionStrategyFactory(List<RetrieveTransactionStrategy> retrieveStrategies) {
         retrieveStrategyMap = retrieveStrategies.stream().collect(Collectors.toMap(RetrieveTransactionStrategy::retrieveType, Function.identity()));
     }
 

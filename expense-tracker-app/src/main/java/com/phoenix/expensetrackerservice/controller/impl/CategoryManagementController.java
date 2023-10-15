@@ -43,7 +43,15 @@ public class CategoryManagementController implements CategoryManagementAPI {
     @GetMapping(path = ControllerConstants.CATEGORY_RETRIEVE_MAPPING, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoryDTO> retrieveCategory(@PathVariable String categoryId) {
         CategoryDTO response = categoryManagementService.retrieveCategory(categoryId);
-        return new ResponseEntity<>(response, getResponseHeaders(), HttpStatus.CREATED);
+        return ResponseEntity.ok().headers(getResponseHeaders()).body(response);
+    }
+
+    @Override
+    @Log(action = LogConstants.RETRIEVE_ALL_ACTION)
+    @GetMapping(path = ControllerConstants.CATEGORY_RETRIEVE_ALL_MAPPING, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CategoryDTO>> retrieveCategories() {
+        List<CategoryDTO> categories = categoryManagementService.retrieveCategories();
+        return ResponseEntity.ok().headers(getResponseHeaders()).body(categories);
     }
 
     @Override
@@ -51,7 +59,7 @@ public class CategoryManagementController implements CategoryManagementAPI {
     @PutMapping(path = ControllerConstants.CATEGORY_CHANGE_MAPPING, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CategoryDTO> changeCategory(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO response = categoryManagementService.changeCategory(categoryDTO);
-        return new ResponseEntity<>(response, getResponseHeaders(), HttpStatus.CREATED);
+        return ResponseEntity.ok().headers(getResponseHeaders()).body(response);
     }
 
     @Override

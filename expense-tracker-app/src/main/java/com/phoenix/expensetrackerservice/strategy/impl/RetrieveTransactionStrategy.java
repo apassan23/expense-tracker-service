@@ -15,11 +15,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RetrieveTransactionTransactionStrategy implements com.phoenix.expensetrackerservice.strategy.RetrieveTransactionStrategy {
+public class RetrieveTransactionStrategy implements com.phoenix.expensetrackerservice.strategy.RetrieveTransactionStrategy {
 
     private final TransactionDataService transactionDataService;
 
-    public RetrieveTransactionTransactionStrategy(TransactionDataService transactionDataService) {
+    public RetrieveTransactionStrategy(TransactionDataService transactionDataService) {
         this.transactionDataService = transactionDataService;
     }
 
@@ -37,6 +37,6 @@ public class RetrieveTransactionTransactionStrategy implements com.phoenix.expen
 
     @Override
     public RetrieveType retrieveType() {
-        return RetrieveType.FETCH_SINGLE_TRANSACTION;
+        return RetrieveType.FETCH_SINGLE_ENTITY;
     }
 }

@@ -5,7 +5,7 @@ import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.RetrieveTransactionService;
 import com.phoenix.expensetrackerservice.strategy.RetrieveTransactionStrategy;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
-import com.phoenix.expensetrackerservice.strategy.factory.RetrieveStrategyFactory;
+import com.phoenix.expensetrackerservice.strategy.factory.RetrieveTransactionStrategyFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,21 +13,21 @@ import java.util.Objects;
 
 @Service
 public class RetrieveTransactionServiceImpl implements RetrieveTransactionService {
-    private final RetrieveStrategyFactory retrieveStrategyFactory;
+    private final RetrieveTransactionStrategyFactory retrieveTransactionStrategyFactory;
 
-    public RetrieveTransactionServiceImpl(RetrieveStrategyFactory retrieveStrategyFactory) {
-        this.retrieveStrategyFactory = retrieveStrategyFactory;
+    public RetrieveTransactionServiceImpl(RetrieveTransactionStrategyFactory retrieveTransactionStrategyFactory) {
+        this.retrieveTransactionStrategyFactory = retrieveTransactionStrategyFactory;
     }
 
     @Override
     public List<TransactionDTO> given(RetrieveTransactionDTO retrieveTransactionDTO) {
         RetrieveTransactionStrategy retrieveTransactionStrategy;
         if (Objects.nonNull(retrieveTransactionDTO.getTransactionId())) {
-            retrieveTransactionStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_SINGLE_TRANSACTION);
+            retrieveTransactionStrategy = retrieveTransactionStrategyFactory.getStrategy(RetrieveType.FETCH_SINGLE_ENTITY);
         } else if (retrieveTransactionDTO.isFetchAll()) {
-            retrieveTransactionStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_ALL);
+            retrieveTransactionStrategy = retrieveTransactionStrategyFactory.getStrategy(RetrieveType.FETCH_ALL);
         } else {
-            retrieveTransactionStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_BY_PAGE);
+            retrieveTransactionStrategy = retrieveTransactionStrategyFactory.getStrategy(RetrieveType.FETCH_BY_PAGE);
         }
 
         return retrieveTransactionStrategy.retrieve(retrieveTransactionDTO);

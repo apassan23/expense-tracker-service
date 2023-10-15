@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RetrieveAllTransactionsTransactionStrategy implements RetrieveTransactionStrategy {
+public class RetrieveAllTransactionsStrategy implements RetrieveTransactionStrategy {
     private final TransactionDataService transactionDataService;
 
-    public RetrieveAllTransactionsTransactionStrategy(TransactionDataService transactionDataService) {
+    public RetrieveAllTransactionsStrategy(TransactionDataService transactionDataService) {
         this.transactionDataService = transactionDataService;
     }
 

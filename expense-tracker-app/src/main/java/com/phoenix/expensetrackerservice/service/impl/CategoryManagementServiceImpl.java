@@ -9,20 +9,26 @@ import com.phoenix.expensetrackerservice.model.CategoryDTO;
 import com.phoenix.expensetrackerservice.service.CategoryDataService;
 import com.phoenix.expensetrackerservice.service.CategoryManagementService;
 import com.phoenix.expensetrackerservice.service.CategoryRequestValidationService;
+import com.phoenix.expensetrackerservice.strategy.RetrieveCategoryStrategy;
+import com.phoenix.expensetrackerservice.strategy.RetrieveType;
+import com.phoenix.expensetrackerservice.strategy.factory.RetrieveCategoryStrategyFactory;
 import com.phoenix.expensetrackerservice.transform.CategoryBuilder;
 import com.phoenix.expensetrackerservice.transform.CategoryEntityBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CategoryManagementServiceImpl implements CategoryManagementService {
     private final CategoryDataService categoryDataService;
     private final CategoryRequestValidationService categoryRequestValidationService;
+    private final RetrieveCategoryStrategyFactory retrieveCategoryStrategyFactory;
 
-    public CategoryManagementServiceImpl(CategoryDataService categoryDataService, CategoryRequestValidationService categoryRequestValidationService) {
+    public CategoryManagementServiceImpl(CategoryDataService categoryDataService, CategoryRequestValidationService categoryRequestValidationService, RetrieveCategoryStrategyFactory retrieveCategoryStrategyFactory) {
         this.categoryDataService = categoryDataService;
         this.categoryRequestValidationService = categoryRequestValidationService;
+        this.retrieveCategoryStrategyFactory = retrieveCategoryStrategyFactory;
     }
 
     @Override
@@ -30,7 +36,7 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         categoryRequestValidationService.validateForCreate(categoryDTO);
         String categoryTitle = categoryDTO.getTitle();
         Optional<Category> categoryOptional = categoryDataService.findByTitle(categoryTitle);
-        if(categoryOptional.isPresent()) {
+        if (categoryOptional.isPresent()) {
             throw new ExpenseTrackerBadRequestException(ExpenseError.CATEGORY_ALREADY_EXISTS.getDescription(), ExpenseError.CATEGORY_ALREADY_EXISTS);
         }
         Category category = CategoryEntityBuilder.buildFromCategoryDTO(categoryDTO);
@@ -42,13 +48,13 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         categoryRequestValidationService.validateForChange(categoryDTO);
         String categoryId = categoryDTO.getCategoryId();
         Optional<Category> categoryOptional = categoryDataService.findByCategoryId(categoryId);
-        if(categoryOptional.isEmpty()) {
+        if (categoryOptional.isEmpty()) {
             throw new ExpenseTrackerNotFoundException(ExpenseError.CATEGORY_DOES_NOT_EXISTS.getDescription(), ExpenseError.CATEGORY_DOES_NOT_EXISTS);
         }
         Category retrievedCategory = categoryOptional.get();
-        if(!retrievedCategory.getTitle().equals(categoryDTO.getTitle())) {
+        if (!retrievedCategory.getTitle().equals(categoryDTO.getTitle())) {
             Optional<Category> byTitle = categoryDataService.findByTitle(categoryDTO.getTitle());
-            if(byTitle.isPresent()) {
+            if (byTitle.isPresent()) {
                 // category name change is requested but a category with the same name already exists
                 throw new ExpenseTrackerBadRequestException(ErrorConstants.CATEGORY_ALREADY_EXISTS_MESSAGE, ExpenseError.CATEGORY_ALREADY_EXISTS);
             }
@@ -61,18 +67,23 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
     public CategoryDTO retrieveCategory(String categoryId) {
         CategoryDTO categoryDTO = CategoryBuilder.buildFromCategoryId(categoryId);
         categoryRequestValidationService.validateForRetrieve(categoryDTO);
-        Optional<Category> categoryOptional = categoryDataService.findByCategoryId(categoryId);
-        if(categoryOptional.isEmpty()) {
-            throw new ExpenseTrackerNotFoundException(ExpenseError.CATEGORY_DOES_NOT_EXISTS.getDescription(), ExpenseError.CATEGORY_DOES_NOT_EXISTS);
-        }
-        return CategoryEntityBuilder.buildFromCategory(categoryOptional.get());
+        RetrieveCategoryStrategy retrieveCategoryStrategy = retrieveCategoryStrategyFactory.getStrategy(RetrieveType.FETCH_SINGLE_ENTITY);
+        List<CategoryDTO> categories = retrieveCategoryStrategy.retrieve(categoryDTO);
+        return categories.stream().findFirst().orElse(null);
+    }
+
+    @Override
+    public List<CategoryDTO> retrieveCategories() {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        RetrieveCategoryStrategy retrieveCategoryStrategy = retrieveCategoryStrategyFactory.getStrategy(RetrieveType.FETCH_ALL);
+        return retrieveCategoryStrategy.retrieve(categoryDTO);
     }
 
     @Override
     public void deleteCategory(String categoryId) {
         CategoryDTO categoryDTO = CategoryBuilder.buildFromCategoryId(categoryId);
         categoryRequestValidationService.validateForRetrieve(categoryDTO);
-        if(!categoryDataService.existsByCategoryId(categoryId)) {
+        if (!categoryDataService.existsByCategoryId(categoryId)) {
             throw new ExpenseTrackerNotFoundException(ExpenseError.CATEGORY_DOES_NOT_EXISTS.getDescription(), ExpenseError.CATEGORY_DOES_NOT_EXISTS);
         }
         categoryDataService.deleteByCategoryId(categoryId);

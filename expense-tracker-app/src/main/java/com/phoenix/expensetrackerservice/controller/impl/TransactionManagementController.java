@@ -50,7 +50,7 @@ public class TransactionManagementController implements TransactionManagementAPI
     }
 
     @Override
-    @Log(action = LogConstants.RETRIEVE_ACTION, level = Level.WARN)
+    @Log(action = LogConstants.RETRIEVE_ALL_ACTION, level = Level.WARN)
     @GetMapping(path = ControllerConstants.TRANSACTION_RETRIEVE_ALL_MAPPING, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TransactionDTO>> retrieveTransaction(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageSize) {
         List<TransactionDTO> response = transactionManagementService.retrieveTransactions(pageNumber, pageSize);
