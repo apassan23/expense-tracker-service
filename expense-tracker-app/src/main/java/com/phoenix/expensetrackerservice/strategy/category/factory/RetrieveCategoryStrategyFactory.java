@@ -1,7 +1,7 @@
-package com.phoenix.expensetrackerservice.strategy.factory;
+package com.phoenix.expensetrackerservice.strategy.category.factory;
 
-import com.phoenix.expensetrackerservice.strategy.RetrieveCategoryStrategy;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
+import com.phoenix.expensetrackerservice.strategy.category.RetrieveCategoryStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

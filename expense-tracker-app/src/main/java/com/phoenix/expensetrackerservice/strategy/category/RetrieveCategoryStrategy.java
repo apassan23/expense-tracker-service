@@ -1,6 +1,7 @@
-package com.phoenix.expensetrackerservice.strategy;
+package com.phoenix.expensetrackerservice.strategy.category;
 
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
+import com.phoenix.expensetrackerservice.strategy.RetrieveType;
 
 import java.util.List;
 
