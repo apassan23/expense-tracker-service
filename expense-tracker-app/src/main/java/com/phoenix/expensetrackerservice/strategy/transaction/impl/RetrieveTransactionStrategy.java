@@ -1,4 +1,4 @@
-package com.phoenix.expensetrackerservice.strategy.impl;
+package com.phoenix.expensetrackerservice.strategy.transaction.impl;
 
 import com.phoenix.expensetrackerservice.entity.Transaction;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class RetrieveTransactionStrategy implements com.phoenix.expensetrackerservice.strategy.RetrieveTransactionStrategy {
+public class RetrieveTransactionStrategy implements com.phoenix.expensetrackerservice.strategy.transaction.RetrieveTransactionStrategy {
 
     private final TransactionDataService transactionDataService;
 

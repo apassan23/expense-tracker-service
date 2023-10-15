@@ -1,4 +1,4 @@
-package com.phoenix.expensetrackerservice.service;
+package com.phoenix.expensetrackerservice.service.category;
 
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
 
