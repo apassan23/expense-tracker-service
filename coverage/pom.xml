@@ -62,6 +62,16 @@
                                 <dataFileInclude>**/jacoco.exec</dataFileInclude>
                             </dataFileIncludes>
                             <outputDirectory>${project.reporting.outputDirectory}/jacoco-aggregate</outputDirectory>
+                            <excludes>
+                                <exclude>**/exception/*Exception*</exclude>
+                                <exclude>**/response/**</exclude>
+                                <exclude>**/enums/**</exclude>
+                                <exclude>**/config/**</exclude>
+                                <exclude>**/constants/**</exclude>
+                                <exclude>**/model/**</exclude>
+                                <exclude>**/entity/**</exclude>
+                                <exclude>**/repository/**</exclude>
+                            </excludes>
                         </configuration>
                     </execution>
                 </executions>
