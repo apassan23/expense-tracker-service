@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.phoenix</groupId>
     <artifactId>expense-tracker-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>expense-tracker-service</name>
     <description>Expense Tracker Service</description>
@@ -20,6 +20,7 @@
         <module>expense-tracker-data</module>
         <module>expense-tracker-aop</module>
         <module>expense-tracker-auth</module>
+        <module>coverage</module>
     </modules>
     <properties>
         <java.version>20</java.version>
@@ -54,13 +55,26 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <argLine>${surefireArgLine}</argLine>
+                    <argLine>${argLine}</argLine>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>**/*IntegrationTest.java</include>
+                    </includes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -73,8 +87,8 @@
                             <goal>prepare-agent</goal>
                         </goals>
                         <configuration>
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-                            <propertyName>surefireArgLine</propertyName>
+                            <destFile>${project.build.directory}/coverage-reports/jacoco.exec</destFile>
+                            <propertyName>argLine</propertyName>
                         </configuration>
                     </execution>
                     <execution>
@@ -84,8 +98,8 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                            <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+                            <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
