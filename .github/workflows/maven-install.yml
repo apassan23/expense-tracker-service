@@ -39,6 +39,24 @@ jobs:
         minimum_coverage: 80
         fail_below_threshold: false
         publish_only_summary: false
+    - name: Jacoco Report to PR
+      id: jacoco
+      uses: madrapps/jacoco-report@v1.1
+      with:
+        path: ${{ github.workspace }}/build/reports/jacoco/testCoverage/testCoverage.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        min-coverage-overall: 40
+        min-coverage-changed-files: 60
+        debug-mode: false
+    - name: Get the Coverage info
+      run: |
+        echo "Total coverage coverage-overall ${{ steps.jacoco.outputs.coverage-overall }}"
+        echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
+        echo "Coverage coveragePercentage ${{ steps.jacoco_reporter.outputs.coveragePercentage }}"
+        echo "Coverage coveragePercentageString ${{ steps.jacoco_reporter.outputs.coveragePercentageString }}"
+
+    - name: Publish Coverager Workflow Build Summary
+      run: echo "${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_STEP_SUMMARY
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
