@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RetrieveTransactionDTO {
+    @JsonProperty("transactionId")
+    private String transactionId;
+
     @JsonProperty("pageNumber")
     private Integer pageNumber;
 

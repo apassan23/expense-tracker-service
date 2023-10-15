@@ -45,17 +45,17 @@ public class TransactionManagementServiceImpl implements TransactionManagementSe
 
     @Override
     public TransactionDTO retrieveTransaction(String transactionId) {
-        TransactionDTO transactionDTO = TransactionBuilder.buildFromTransactionId(transactionId);
+        RetrieveTransactionDTO transactionDTO = RetrieveTransactionBuilder.build(transactionId);
         transactionRequestValidationService.validateForRetrieve(transactionDTO);
-        TransactionDTO transactionResponse = retrieveTransactionService.given(transactionDTO);
-        return transactionResponse;
+        List<TransactionDTO> transactionResponse = retrieveTransactionService.given(transactionDTO);
+        return transactionResponse.stream().findFirst().orElse(null);
     }
 
     @Override
     public List<TransactionDTO> retrieveTransactions(Integer pageNumber, Integer pageSize) {
         RetrieveTransactionDTO retrieveTransactionDTO = RetrieveTransactionBuilder.build(pageNumber, pageSize, Boolean.TRUE);
         transactionRequestValidationService.validateForRetrieve(retrieveTransactionDTO);
-        if(Objects.nonNull(retrieveTransactionDTO.getPageNumber()) && Objects.nonNull(retrieveTransactionDTO.getPageSize())) {
+        if (Objects.nonNull(retrieveTransactionDTO.getPageNumber()) && Objects.nonNull(retrieveTransactionDTO.getPageSize())) {
             retrieveTransactionDTO.setFetchAll(Boolean.FALSE);
         }
         List<TransactionDTO> transactions = retrieveTransactionService.given(retrieveTransactionDTO);

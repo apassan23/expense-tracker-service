@@ -8,15 +8,23 @@ import lombok.NoArgsConstructor;
 public class RetrieveTransactionBuilder {
 
     public static RetrieveTransactionDTO build(Integer pageNumber, Integer pageSize, boolean fetchAll) {
-        RetrieveTransactionDTO retrieveTransactionDTO = build(pageNumber, pageSize);
-        retrieveTransactionDTO.setFetchAll(fetchAll);
-        return retrieveTransactionDTO;
+        return build(null, pageNumber, pageSize, fetchAll);
     }
 
     public static RetrieveTransactionDTO build(Integer pageNumber, Integer pageSize) {
+        return build(null, pageNumber, pageSize, Boolean.FALSE);
+    }
+
+    public static RetrieveTransactionDTO build(String transactionId, Integer pageNumber, Integer pageSize, boolean fetchAll) {
         return RetrieveTransactionDTO.builder()
+                .transactionId(transactionId)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
+                .fetchAll(fetchAll)
                 .build();
+    }
+
+    public static RetrieveTransactionDTO build(String transactionId) {
+        return build(transactionId, null, null, Boolean.FALSE);
     }
 }

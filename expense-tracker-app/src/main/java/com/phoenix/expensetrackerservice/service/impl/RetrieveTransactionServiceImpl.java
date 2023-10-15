@@ -1,51 +1,35 @@
 package com.phoenix.expensetrackerservice.service.impl;
 
-import com.phoenix.expensetrackerservice.entity.Transaction;
-import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
-import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.RetrieveTransactionDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.RetrieveTransactionService;
-import com.phoenix.expensetrackerservice.service.TransactionDataService;
-import com.phoenix.expensetrackerservice.transform.TransactionEntityBuilder;
+import com.phoenix.expensetrackerservice.strategy.RetrieveStrategy;
+import com.phoenix.expensetrackerservice.strategy.RetrieveType;
+import com.phoenix.expensetrackerservice.strategy.factory.RetrieveStrategyFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 public class RetrieveTransactionServiceImpl implements RetrieveTransactionService {
-    private final TransactionDataService transactionDataService;
+    private final RetrieveStrategyFactory retrieveStrategyFactory;
 
-    public RetrieveTransactionServiceImpl(TransactionDataService transactionDataService) {
-        this.transactionDataService = transactionDataService;
-    }
-
-    @Override
-    public TransactionDTO given(TransactionDTO transactionDTO) {
-        String transactionId = transactionDTO.getTransactionId();
-        Optional<Transaction> transaction = transactionDataService.findByTransactionId(transactionId);
-        // transaction retrieve response is empty
-        if(transaction.isEmpty()) {
-            throw new ExpenseTrackerNotFoundException(ExpenseError.TRANSACTION_NOT_PRESENT.getDescription(), ExpenseError.TRANSACTION_NOT_PRESENT);
-        }
-        return TransactionEntityBuilder.buildFromTransaction(transaction.get());
+    public RetrieveTransactionServiceImpl(RetrieveStrategyFactory retrieveStrategyFactory) {
+        this.retrieveStrategyFactory = retrieveStrategyFactory;
     }
 
     @Override
     public List<TransactionDTO> given(RetrieveTransactionDTO retrieveTransactionDTO) {
-        if(retrieveTransactionDTO.isFetchAll()) {
-            List<Transaction> transactions = transactionDataService.findAll();
-            return getTransactions(transactions);
+        RetrieveStrategy retrieveStrategy;
+        if (Objects.nonNull(retrieveTransactionDTO.getTransactionId())) {
+            retrieveStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_SINGLE_TRANSACTION);
+        } else if (retrieveTransactionDTO.isFetchAll()) {
+            retrieveStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_ALL);
+        } else {
+            retrieveStrategy = retrieveStrategyFactory.getStrategy(RetrieveType.FETCH_BY_PAGE);
         }
 
-        Integer pageNumber = retrieveTransactionDTO.getPageNumber();
-        Integer pageSize = retrieveTransactionDTO.getPageSize();
-        List<Transaction> transactions = transactionDataService.findAll(pageNumber, pageSize);
-        return getTransactions(transactions);
-    }
-
-    private List<TransactionDTO> getTransactions(List<Transaction> transactions) {
-        return transactions.stream().map(TransactionEntityBuilder::buildFromTransaction).toList();
+        return retrieveStrategy.retrieve(retrieveTransactionDTO);
     }
 }
