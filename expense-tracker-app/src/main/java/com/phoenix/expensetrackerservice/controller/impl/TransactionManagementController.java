@@ -5,7 +5,7 @@ import com.phoenix.expensetrackerservice.constants.ControllerConstants;
 import com.phoenix.expensetrackerservice.constants.LogConstants;
 import com.phoenix.expensetrackerservice.controller.TransactionManagementAPI;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
-import com.phoenix.expensetrackerservice.service.TransactionManagementService;
+import com.phoenix.expensetrackerservice.service.transaction.TransactionManagementService;
 import org.slf4j.event.Level;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

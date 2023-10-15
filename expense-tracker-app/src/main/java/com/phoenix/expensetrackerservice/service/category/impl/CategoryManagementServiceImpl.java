@@ -1,4 +1,4 @@
-package com.phoenix.expensetrackerservice.service.impl;
+package com.phoenix.expensetrackerservice.service.category.impl;
 
 import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.entity.Category;
@@ -7,11 +7,11 @@ import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundExcepti
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
 import com.phoenix.expensetrackerservice.service.CategoryDataService;
-import com.phoenix.expensetrackerservice.service.CategoryManagementService;
-import com.phoenix.expensetrackerservice.service.CategoryRequestValidationService;
-import com.phoenix.expensetrackerservice.strategy.RetrieveCategoryStrategy;
+import com.phoenix.expensetrackerservice.service.category.CategoryManagementService;
+import com.phoenix.expensetrackerservice.service.category.CategoryRequestValidationService;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
-import com.phoenix.expensetrackerservice.strategy.factory.RetrieveCategoryStrategyFactory;
+import com.phoenix.expensetrackerservice.strategy.category.RetrieveCategoryStrategy;
+import com.phoenix.expensetrackerservice.strategy.category.factory.RetrieveCategoryStrategyFactory;
 import com.phoenix.expensetrackerservice.transform.CategoryBuilder;
 import com.phoenix.expensetrackerservice.transform.CategoryEntityBuilder;
 import org.springframework.stereotype.Service;

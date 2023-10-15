@@ -1,11 +1,11 @@
-package com.phoenix.expensetrackerservice.service.impl;
+package com.phoenix.expensetrackerservice.service.transaction.impl;
 
 import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerBadRequestException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.RetrieveTransactionDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
-import com.phoenix.expensetrackerservice.service.TransactionRequestValidationService;
+import com.phoenix.expensetrackerservice.service.transaction.TransactionRequestValidationService;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -14,7 +14,7 @@ import java.util.Objects;
 public class TransactionRequestValidationServiceImpl implements TransactionRequestValidationService {
     @Override
     public void validateForCreate(TransactionDTO transactionDTO) {
-        if(Objects.nonNull(transactionDTO) &&
+        if (Objects.nonNull(transactionDTO) &&
                 Objects.nonNull(transactionDTO.getTransactionName()) &&
                 Objects.nonNull(transactionDTO.getTransactionMonth()) &&
                 Objects.nonNull(transactionDTO.getTransactionType()) &&
@@ -31,7 +31,7 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
 
     @Override
     public void validateForChange(TransactionDTO transactionDTO) {
-        if(Objects.nonNull(transactionDTO) &&
+        if (Objects.nonNull(transactionDTO) &&
                 Objects.nonNull(transactionDTO.getTransactionId()) &&
                 Objects.nonNull(transactionDTO.getTransactionName()) &&
                 Objects.nonNull(transactionDTO.getTransactionMonth()) &&
@@ -49,7 +49,7 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
 
     @Override
     public void validateForRetrieve(TransactionDTO transactionDTO) {
-        if(Objects.nonNull(transactionDTO) &&
+        if (Objects.nonNull(transactionDTO) &&
                 Objects.nonNull(transactionDTO.getTransactionId())) {
             return;
         }
@@ -59,8 +59,8 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
 
     @Override
     public void validateForRetrieve(RetrieveTransactionDTO retrieveTransactionDTO) {
-        if(Objects.nonNull(retrieveTransactionDTO)){
-            if(Objects.isNull(retrieveTransactionDTO.getPageSize()) && Objects.isNull(retrieveTransactionDTO.getPageNumber())) {
+        if (Objects.nonNull(retrieveTransactionDTO)) {
+            if (Objects.isNull(retrieveTransactionDTO.getPageSize()) && Objects.isNull(retrieveTransactionDTO.getPageNumber())) {
                 return;
             } else if (Objects.nonNull(retrieveTransactionDTO.getPageSize()) &&
                     Objects.nonNull(retrieveTransactionDTO.getPageNumber()) &&
@@ -74,7 +74,7 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
 
     @Override
     public void validateForDelete(TransactionDTO transactionDTO) {
-        if(Objects.nonNull(transactionDTO) &&
+        if (Objects.nonNull(transactionDTO) &&
                 Objects.nonNull(transactionDTO.getTransactionId())) {
             return;
         }

@@ -1,7 +1,8 @@
-package com.phoenix.expensetrackerservice.strategy;
+package com.phoenix.expensetrackerservice.strategy.transaction;
 
 import com.phoenix.expensetrackerservice.model.RetrieveTransactionDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
+import com.phoenix.expensetrackerservice.strategy.RetrieveType;
 
 import java.util.List;
 

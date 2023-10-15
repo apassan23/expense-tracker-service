@@ -1,10 +1,10 @@
-package com.phoenix.expensetrackerservice.service.impl;
+package com.phoenix.expensetrackerservice.service.transaction.impl;
 
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
-import com.phoenix.expensetrackerservice.service.DeleteTransactionService;
 import com.phoenix.expensetrackerservice.service.TransactionDataService;
+import com.phoenix.expensetrackerservice.service.transaction.DeleteTransactionService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,8 +19,8 @@ public class DeleteTransactionServiceImpl implements DeleteTransactionService {
     public TransactionDTO given(TransactionDTO transactionDTO) {
         // fetch the transaction by transaction id
         String transactionId = transactionDTO.getTransactionId();
-        if(!transactionDataService.existsByTransactionId(transactionId)) {
-        // throw an error if transaction does not exist
+        if (!transactionDataService.existsByTransactionId(transactionId)) {
+            // throw an error if transaction does not exist
             throw new ExpenseTrackerNotFoundException(ExpenseError.TRANSACTION_NOT_PRESENT.getDescription(), ExpenseError.TRANSACTION_NOT_PRESENT);
         }
         // delete the transaction

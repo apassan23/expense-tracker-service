@@ -5,7 +5,7 @@ import com.phoenix.expensetrackerservice.constants.ControllerConstants;
 import com.phoenix.expensetrackerservice.constants.LogConstants;
 import com.phoenix.expensetrackerservice.controller.CategoryManagementAPI;
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
-import com.phoenix.expensetrackerservice.service.CategoryManagementService;
+import com.phoenix.expensetrackerservice.service.category.CategoryManagementService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

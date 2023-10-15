@@ -1,12 +1,12 @@
-package com.phoenix.expensetrackerservice.strategy.impl;
+package com.phoenix.expensetrackerservice.strategy.category.impl;
 
 import com.phoenix.expensetrackerservice.entity.Category;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
 import com.phoenix.expensetrackerservice.service.CategoryDataService;
-import com.phoenix.expensetrackerservice.strategy.RetrieveCategoryStrategy;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
+import com.phoenix.expensetrackerservice.strategy.category.RetrieveCategoryStrategy;
 import com.phoenix.expensetrackerservice.transform.CategoryEntityBuilder;
 import org.springframework.stereotype.Component;
 

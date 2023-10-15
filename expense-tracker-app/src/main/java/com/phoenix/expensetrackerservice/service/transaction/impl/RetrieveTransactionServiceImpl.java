@@ -1,11 +1,11 @@
-package com.phoenix.expensetrackerservice.service.impl;
+package com.phoenix.expensetrackerservice.service.transaction.impl;
 
 import com.phoenix.expensetrackerservice.model.RetrieveTransactionDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
-import com.phoenix.expensetrackerservice.service.RetrieveTransactionService;
-import com.phoenix.expensetrackerservice.strategy.RetrieveTransactionStrategy;
+import com.phoenix.expensetrackerservice.service.transaction.RetrieveTransactionService;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
-import com.phoenix.expensetrackerservice.strategy.factory.RetrieveTransactionStrategyFactory;
+import com.phoenix.expensetrackerservice.strategy.transaction.RetrieveTransactionStrategy;
+import com.phoenix.expensetrackerservice.strategy.transaction.factory.RetrieveTransactionStrategyFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
