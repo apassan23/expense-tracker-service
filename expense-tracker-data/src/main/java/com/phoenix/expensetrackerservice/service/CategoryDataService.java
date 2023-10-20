@@ -8,13 +8,13 @@ import java.util.Optional;
 public interface CategoryDataService {
     Category save(Category category);
 
-    Optional<Category> findByCategoryId(String categoryId);
+    Optional<Category> findByCategoryIdAndUsername(String categoryId, String username);
 
-    Optional<Category> findByTitle(String title);
+    Optional<Category> findByTitleAndUsername(String title, String username);
 
-    List<Category> findAll();
+    List<Category> findAllByUsername(String username);
 
     void deleteByCategoryId(String categoryId);
 
-    boolean existsByCategoryId(String categoryId);
+    boolean existsByCategoryIdAndUsername(String categoryId, String username);
 }

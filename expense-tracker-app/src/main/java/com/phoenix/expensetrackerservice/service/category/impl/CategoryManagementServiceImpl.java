@@ -3,6 +3,7 @@ package com.phoenix.expensetrackerservice.service.category.impl;
 import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.entity.Category;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerBadRequestException;
+import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
@@ -14,9 +15,11 @@ import com.phoenix.expensetrackerservice.strategy.category.RetrieveCategoryStrat
 import com.phoenix.expensetrackerservice.strategy.category.factory.RetrieveCategoryStrategyFactory;
 import com.phoenix.expensetrackerservice.transform.CategoryBuilder;
 import com.phoenix.expensetrackerservice.transform.CategoryEntityBuilder;
+import com.phoenix.expensetrackerservice.utils.AuthUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,8 +37,12 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
         categoryRequestValidationService.validateForCreate(categoryDTO);
+        String username = AuthUtils.getUsername();
+        if (Objects.isNull(username)) {
+            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+        }
         String categoryTitle = categoryDTO.getTitle();
-        Optional<Category> categoryOptional = categoryDataService.findByTitle(categoryTitle);
+        Optional<Category> categoryOptional = categoryDataService.findByTitleAndUsername(categoryTitle, username);
         if (categoryOptional.isPresent()) {
             throw new ExpenseTrackerBadRequestException(ExpenseError.CATEGORY_ALREADY_EXISTS.getDescription(), ExpenseError.CATEGORY_ALREADY_EXISTS);
         }
@@ -47,13 +54,17 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
     public CategoryDTO changeCategory(CategoryDTO categoryDTO) {
         categoryRequestValidationService.validateForChange(categoryDTO);
         String categoryId = categoryDTO.getCategoryId();
-        Optional<Category> categoryOptional = categoryDataService.findByCategoryId(categoryId);
+        String username = AuthUtils.getUsername();
+        if (Objects.isNull(username)) {
+            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+        }
+        Optional<Category> categoryOptional = categoryDataService.findByCategoryIdAndUsername(categoryId, username);
         if (categoryOptional.isEmpty()) {
             throw new ExpenseTrackerNotFoundException(ExpenseError.CATEGORY_DOES_NOT_EXISTS.getDescription(), ExpenseError.CATEGORY_DOES_NOT_EXISTS);
         }
         Category retrievedCategory = categoryOptional.get();
         if (!retrievedCategory.getTitle().equals(categoryDTO.getTitle())) {
-            Optional<Category> byTitle = categoryDataService.findByTitle(categoryDTO.getTitle());
+            Optional<Category> byTitle = categoryDataService.findByTitleAndUsername(categoryDTO.getTitle(), username);
             if (byTitle.isPresent()) {
                 // category name change is requested but a category with the same name already exists
                 throw new ExpenseTrackerBadRequestException(ErrorConstants.CATEGORY_ALREADY_EXISTS_MESSAGE, ExpenseError.CATEGORY_ALREADY_EXISTS);
@@ -81,9 +92,13 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
 
     @Override
     public void deleteCategory(String categoryId) {
+        String username = AuthUtils.getUsername();
+        if (Objects.isNull(username)) {
+            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+        }
         CategoryDTO categoryDTO = CategoryBuilder.buildFromCategoryId(categoryId);
         categoryRequestValidationService.validateForRetrieve(categoryDTO);
-        if (!categoryDataService.existsByCategoryId(categoryId)) {
+        if (!categoryDataService.existsByCategoryIdAndUsername(categoryId, username)) {
             throw new ExpenseTrackerNotFoundException(ExpenseError.CATEGORY_DOES_NOT_EXISTS.getDescription(), ExpenseError.CATEGORY_DOES_NOT_EXISTS);
         }
         categoryDataService.deleteByCategoryId(categoryId);

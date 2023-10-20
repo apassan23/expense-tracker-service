@@ -22,18 +22,18 @@ public class CategoryDataServiceImpl implements CategoryDataService {
     }
 
     @Override
-    public Optional<Category> findByCategoryId(String categoryId) {
-        return categoryRepository.findById(categoryId);
+    public Optional<Category> findByCategoryIdAndUsername(String categoryId, String username) {
+        return categoryRepository.findByCategoryIdAndUsername(categoryId, username);
     }
 
     @Override
-    public Optional<Category> findByTitle(String title) {
-        return categoryRepository.findByTitle(title);
+    public Optional<Category> findByTitleAndUsername(String title, String username) {
+        return categoryRepository.findByTitleAndUsername(title, username);
     }
 
     @Override
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<Category> findAllByUsername(String username) {
+        return categoryRepository.findAllByUsername(username);
     }
 
     @Override
@@ -42,8 +42,8 @@ public class CategoryDataServiceImpl implements CategoryDataService {
     }
 
     @Override
-    public boolean existsByCategoryId(String categoryId) {
-        return categoryRepository.existsById(categoryId);
+    public boolean existsByCategoryIdAndUsername(String categoryId, String username) {
+        return categoryRepository.existsByCategoryIdAndUsername(categoryId, username);
     }
 
 }

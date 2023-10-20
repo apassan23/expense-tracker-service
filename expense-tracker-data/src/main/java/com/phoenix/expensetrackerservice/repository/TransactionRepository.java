@@ -15,4 +15,6 @@ public interface TransactionRepository extends MongoRepository<Transaction, Stri
 
     List<Transaction> findAllByUsername(String username);
 
+    boolean existsByTransactionIdAndUsername(String transactionId, String username);
+
 }

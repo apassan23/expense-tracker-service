@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface TransactionDataService {
     Transaction save(Transaction transaction);
 
-    boolean existsByTransactionId(String transactionId);
+    boolean existsByTransactionIdAndUsername(String transactionId, String username);
 
     Optional<Transaction> findByTransactionIdAndUsername(String username, String transactionId);
 

@@ -34,8 +34,8 @@ public class TransactionDataServiceImpl implements TransactionDataService {
     }
 
     @Override
-    public boolean existsByTransactionId(String transactionId) {
-        return transactionRepository.existsById(transactionId);
+    public boolean existsByTransactionIdAndUsername(String transactionId, String username) {
+        return transactionRepository.existsByTransactionIdAndUsername(transactionId, username);
     }
 
     @Override
