@@ -15,6 +15,9 @@ public class RetrieveTransactionDTO {
     @JsonProperty("transactionId")
     private String transactionId;
 
+    @JsonProperty("date")
+    private String date;
+
     @JsonProperty("pageNumber")
     private Integer pageNumber;
 
@@ -22,5 +25,6 @@ public class RetrieveTransactionDTO {
     private Integer pageSize;
 
     @JsonIgnore
-    private boolean fetchAll;
+    @Builder.Default
+    private boolean fetchAll = Boolean.TRUE;
 }

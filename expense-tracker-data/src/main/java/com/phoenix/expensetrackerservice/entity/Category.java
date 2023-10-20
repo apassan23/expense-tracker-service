@@ -16,6 +16,7 @@ public class Category {
     @Id
     private String categoryId;
 
+    private String username;
     private String title;
     private String description;
     private String group;

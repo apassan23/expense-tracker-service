@@ -8,8 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TransactionEntityBuilder {
 
-    public static Transaction buildFromTransactionDto(TransactionDTO transactionDTO){
+    public static Transaction buildFromTransactionDto(TransactionDTO transactionDTO) {
+        return build(null, transactionDTO);
+    }
+
+    public static Transaction build(String username, TransactionDTO transactionDTO) {
         return Transaction.builder()
+                .username(username)
                 .transactionId(transactionDTO.getTransactionId())
                 .transactionName(transactionDTO.getTransactionName())
                 .transactionDate(transactionDTO.getTransactionDate())

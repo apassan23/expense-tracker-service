@@ -3,20 +3,29 @@ package com.phoenix.expensetrackerservice.service.impl;
 import com.phoenix.expensetrackerservice.entity.Transaction;
 import com.phoenix.expensetrackerservice.repository.TransactionRepository;
 import com.phoenix.expensetrackerservice.service.TransactionDataService;
-import org.springframework.data.domain.Page;
+import com.phoenix.expensetrackerservice.utils.DateUtils;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TransactionDataServiceImpl implements TransactionDataService {
 
+    private static final String USERNAME = "username";
+    private static final String TRANSACTION_DATE = "transactionDate";
     private final TransactionRepository transactionRepository;
+    private final MongoOperations mongoOperations;
 
-    public TransactionDataServiceImpl(TransactionRepository transactionRepository) {
+    public TransactionDataServiceImpl(TransactionRepository transactionRepository, MongoOperations mongoOperations) {
         this.transactionRepository = transactionRepository;
+        this.mongoOperations = mongoOperations;
     }
 
     @Override
@@ -25,29 +34,38 @@ public class TransactionDataServiceImpl implements TransactionDataService {
     }
 
     @Override
-    public boolean existsByTransactionId(String transactionId) {
-        return transactionRepository.existsById(transactionId);
+    public boolean existsByTransactionIdAndUsername(String transactionId, String username) {
+        return transactionRepository.existsByTransactionIdAndUsername(transactionId, username);
     }
 
     @Override
-    public Optional<Transaction> findByTransactionId(String transactionId) {
-        return transactionRepository.findById(transactionId);
+    public Optional<Transaction> findByTransactionIdAndUsername(String transactionId, String username) {
+        return transactionRepository.findByTransactionIdAndUsername(transactionId, username);
     }
 
     @Override
-    public Optional<Transaction> findByTransactionName(String transactionName) {
-        return transactionRepository.findByTransactionName(transactionName);
+    public Optional<Transaction> findByUsernameAndTransactionName(String username, String transactionName) {
+        return transactionRepository.findByUsernameAndTransactionName(username, transactionName);
     }
 
     @Override
-    public List<Transaction> findAll(Integer pageNumber, Integer pageSize) {
-        Page<Transaction> transactionPage = transactionRepository.findAll(PageRequest.of(pageNumber, pageSize));
-        return transactionPage.getContent();
+    public List<Transaction> findAllByUsernameAndDate(String username, Date date, Integer pageNumber, Integer pageSize) {
+        Query query = new Query();
+        Date nextDay = DateUtils.nextDay(date);
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
+        Criteria finalCriteria = new Criteria();
+        List<Criteria> criterion = new ArrayList<>();
+        criterion.add(Criteria.where(USERNAME).is(username));
+        criterion.add(Criteria.where(TRANSACTION_DATE).gte(date).lte(nextDay));
+        finalCriteria = finalCriteria.andOperator(criterion);
+        query.addCriteria(finalCriteria);
+        query.with(pageRequest);
+        return mongoOperations.find(query, Transaction.class);
     }
 
     @Override
-    public List<Transaction> findAll() {
-        return transactionRepository.findAll();
+    public List<Transaction> findAllByUsername(String username) {
+        return transactionRepository.findAllByUsername(username);
     }
 
     @Override
