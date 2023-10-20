@@ -4,6 +4,7 @@ import com.phoenix.expensetrackerservice.annotation.Log;
 import com.phoenix.expensetrackerservice.constants.ControllerConstants;
 import com.phoenix.expensetrackerservice.constants.LogConstants;
 import com.phoenix.expensetrackerservice.controller.TransactionManagementAPI;
+import com.phoenix.expensetrackerservice.model.RetrieveTransactionDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.transaction.TransactionManagementService;
 import org.slf4j.event.Level;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -51,11 +51,13 @@ public class TransactionManagementController implements TransactionManagementAPI
 
     @Override
     @Log(action = LogConstants.RETRIEVE_ALL_ACTION, level = Level.WARN)
-    @GetMapping(path = ControllerConstants.TRANSACTION_RETRIEVE_ALL_MAPPING, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TransactionDTO>> retrieveTransaction(@RequestParam(required = false) Integer pageNumber, @RequestParam(required = false) Integer pageSize) {
-        List<TransactionDTO> response = transactionManagementService.retrieveTransactions(pageNumber, pageSize);
+    @PostMapping(path = ControllerConstants.TRANSACTION_RETRIEVE_ALL_MAPPING, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<TransactionDTO>> retrieveTransaction(@RequestBody RetrieveTransactionDTO retrieveTransactionDTO) {
+        List<TransactionDTO> response = transactionManagementService.retrieveTransactions(retrieveTransactionDTO);
         return ResponseEntity.ok().headers(getResponseHeaders()).body(response);
     }
+    // userId -> fetchAll
+    // userId, date, pageNumber, pageSize -> fetchSpecific
 
     @Override
     @Log(action = LogConstants.CHANGE_ACTION)

@@ -1,4 +1,4 @@
-package com.phoenix.expensetrackerservice.util;
+package com.phoenix.expensetrackerservice.utils;
 
 import com.phoenix.expensetrackerservice.entity.Transaction;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
