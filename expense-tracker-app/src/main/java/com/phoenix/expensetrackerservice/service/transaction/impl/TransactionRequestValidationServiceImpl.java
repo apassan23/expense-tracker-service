@@ -60,9 +60,12 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
     @Override
     public void validateForRetrieve(RetrieveTransactionDTO retrieveTransactionDTO) {
         if (Objects.nonNull(retrieveTransactionDTO)) {
-            if (Objects.isNull(retrieveTransactionDTO.getPageSize()) && Objects.isNull(retrieveTransactionDTO.getPageNumber())) {
+            if (Objects.isNull(retrieveTransactionDTO.getDate()) &&
+                    Objects.isNull(retrieveTransactionDTO.getPageSize()) &&
+                    Objects.isNull(retrieveTransactionDTO.getPageNumber())) {
                 return;
-            } else if (Objects.nonNull(retrieveTransactionDTO.getPageSize()) &&
+            } else if (Objects.nonNull(retrieveTransactionDTO.getDate()) &&
+                    Objects.nonNull(retrieveTransactionDTO.getPageSize()) &&
                     Objects.nonNull(retrieveTransactionDTO.getPageNumber()) &&
                     retrieveTransactionDTO.getPageSize() >= 1 &&
                     retrieveTransactionDTO.getPageNumber() >= 0) {

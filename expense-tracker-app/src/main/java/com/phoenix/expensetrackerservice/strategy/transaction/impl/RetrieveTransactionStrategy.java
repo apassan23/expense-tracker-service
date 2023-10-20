@@ -1,6 +1,7 @@
 package com.phoenix.expensetrackerservice.strategy.transaction.impl;
 
 import com.phoenix.expensetrackerservice.entity.Transaction;
+import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.RetrieveTransactionDTO;
@@ -8,10 +9,12 @@ import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.TransactionDataService;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
 import com.phoenix.expensetrackerservice.transform.TransactionEntityBuilder;
+import com.phoenix.expensetrackerservice.utils.AuthUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -26,7 +29,11 @@ public class RetrieveTransactionStrategy implements com.phoenix.expensetrackerse
     @Override
     public List<TransactionDTO> retrieve(RetrieveTransactionDTO retrieveTransactionDTO) {
         String transactionId = retrieveTransactionDTO.getTransactionId();
-        Optional<Transaction> transaction = transactionDataService.findByTransactionId(transactionId);
+        String username = AuthUtils.getUsername();
+        if (Objects.isNull(username)) {
+            throw new ExpenseTrackerException("Username is Null!", ExpenseError.SERVER_ERROR);
+        }
+        Optional<Transaction> transaction = transactionDataService.findByTransactionIdAndUsername(transactionId, username);
         // transaction retrieve response is empty
         if (transaction.isEmpty()) {
             throw new ExpenseTrackerNotFoundException(ExpenseError.TRANSACTION_NOT_PRESENT.getDescription(), ExpenseError.TRANSACTION_NOT_PRESENT);

@@ -22,20 +22,16 @@ public class Transaction {
     @Id
     private String transactionId;
 
+    private String username;
     private String transactionName;
-
     private BigDecimal amount;
-
     private String categoryId;
 
     @CreatedDate
     private Date transactionDate;
 
     private String transactionMonth;
-
     private Account account;
-
     private TransactionType transactionType;
-
     private String notes;
 }

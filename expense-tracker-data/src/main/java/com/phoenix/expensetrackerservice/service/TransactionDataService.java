@@ -1,8 +1,8 @@
 package com.phoenix.expensetrackerservice.service;
 
 import com.phoenix.expensetrackerservice.entity.Transaction;
-import org.springframework.data.domain.Page;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,13 +11,13 @@ public interface TransactionDataService {
 
     boolean existsByTransactionId(String transactionId);
 
-    Optional<Transaction> findByTransactionId(String transactionId);
+    Optional<Transaction> findByTransactionIdAndUsername(String username, String transactionId);
 
-    Optional<Transaction> findByTransactionName(String transactionName);
+    Optional<Transaction> findByUsernameAndTransactionName(String username, String transactionName);
 
-    List<Transaction> findAll(Integer pageNumber, Integer pageSize);
+    List<Transaction> findAllByUsernameAndDate(String username, Date date, Integer pageNumber, Integer pageSize);
 
-    List<Transaction> findAll();
+    List<Transaction> findAllByUsername(String username);
 
     void deleteByTransactionId(String transactionId);
 }
