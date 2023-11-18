@@ -1,6 +1,7 @@
 package com.phoenix.expensetrackerservice.client.impl;
 
 import com.phoenix.expensetrackerservice.client.AuthServiceClient;
+import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.AuthServiceResponse;
@@ -30,7 +31,7 @@ public class AuthServiceClientImpl implements AuthServiceClient<RequestEntity<Vo
             if (Objects.nonNull(authServiceResponseResponseEntity.getBody()) && !authServiceResponseResponseEntity.getStatusCode().isError()) {
                 return authServiceResponseResponseEntity.getBody();
             }
-            throw new ExpenseTrackerException("Error occurred while validating token", ExpenseError.SERVER_ERROR);
+            throw new ExpenseTrackerException(ErrorConstants.TOKEN_VALIDATION_ERROR, ExpenseError.SERVER_ERROR);
         } catch (ExpenseTrackerException e) {
             throw e;
         } catch (Exception e) {
