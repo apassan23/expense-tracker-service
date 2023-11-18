@@ -26,7 +26,6 @@ public class JsonUtils {
     }
 
     public static <T> T parse(String json, Class<T> clazz) throws JsonProcessingException {
-        return objectMapper.readValue(json, new TypeReference<>() {
-        });
+        return objectMapper.readValue(json, clazz);
     }
 }
