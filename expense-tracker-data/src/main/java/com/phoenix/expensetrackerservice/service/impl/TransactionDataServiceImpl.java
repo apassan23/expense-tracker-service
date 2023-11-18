@@ -50,16 +50,13 @@ public class TransactionDataServiceImpl implements TransactionDataService {
 
     @Override
     public List<Transaction> findAllByUsernameAndDate(String username, Date date, Integer pageNumber, Integer pageSize) {
-        Query query = new Query();
-        Date nextDay = DateUtils.nextDay(date);
         PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
-        Criteria finalCriteria = new Criteria();
-        List<Criteria> criterion = new ArrayList<>();
-        criterion.add(Criteria.where(USERNAME).is(username));
-        criterion.add(Criteria.where(TRANSACTION_DATE).gte(date).lte(nextDay));
-        finalCriteria = finalCriteria.andOperator(criterion);
-        query.addCriteria(finalCriteria);
+        Criteria criteria = buildCriteria(username, date);
+
+        Query query = new Query();
+        query.addCriteria(criteria);
         query.with(pageRequest);
+
         return mongoOperations.find(query, Transaction.class);
     }
 
@@ -71,5 +68,15 @@ public class TransactionDataServiceImpl implements TransactionDataService {
     @Override
     public void deleteByTransactionId(String transactionId) {
         transactionRepository.deleteById(transactionId);
+    }
+
+    private Criteria buildCriteria(String username, Date date) {
+        Date nextDay = DateUtils.nextDay(date);
+
+        List<Criteria> criterion = new ArrayList<>();
+        criterion.add(Criteria.where(USERNAME).is(username));
+        criterion.add(Criteria.where(TRANSACTION_DATE).gte(date).lte(nextDay));
+
+        return new Criteria().andOperator(criterion);
     }
 }

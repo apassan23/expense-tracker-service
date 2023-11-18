@@ -1,5 +1,6 @@
 package com.phoenix.expensetrackerservice.strategy.category.impl;
 
+import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.entity.Category;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
@@ -26,7 +27,7 @@ public class RetrieveAllCategoriesStrategy implements RetrieveCategoryStrategy {
     public List<CategoryDTO> retrieve(CategoryDTO categoryDTO) {
         String username = AuthUtils.getUsername();
         if (Objects.isNull(username)) {
-            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+            throw new ExpenseTrackerException(ErrorConstants.USERNAME_NULL_MESSAGE, ExpenseError.SERVER_ERROR);
         }
         List<Category> categories = categoryDataService.findAllByUsername(username);
         return categories.stream().map(CategoryEntityBuilder::buildFromCategory).toList();

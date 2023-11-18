@@ -18,9 +18,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
@@ -28,25 +33,30 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class RetrieveAllTransactionsStrategyTest {
+class RetrieveTransactionByPageStrategyTest {
 
     private static final String USERNAME = "dummy.user";
     private static final String AUTH_PRINCIPAL = "{\"name\": \"%s\"}".formatted(USERNAME);
 
     @Mock
     private TransactionDataService transactionDataService;
-
-    private RetrieveAllTransactionsStrategy retrieveAllTransactionsStrategy;
+    private RetrieveTransactionByPageStrategy retrieveTransactionByPageStrategy;
 
     @BeforeEach
     void setup() {
-        retrieveAllTransactionsStrategy = spy(new RetrieveAllTransactionsStrategy(transactionDataService));
+        retrieveTransactionByPageStrategy = spy(new RetrieveTransactionByPageStrategy(transactionDataService));
     }
 
     @Test
     void retrieveTest() {
         // prepare
         final int LENGTH = 5;
+        final String DATE = "1999-02-23";
+        final Integer PAGE_NUMBER = 1;
+        RetrieveTransactionDTO retrieveTransactionDTO = new RetrieveTransactionDTO();
+        retrieveTransactionDTO.setDate(DATE);
+        retrieveTransactionDTO.setPageNumber(PAGE_NUMBER);
+        retrieveTransactionDTO.setPageSize(LENGTH);
         SecurityContext mockSecurityContext = mock(SecurityContext.class);
         Authentication mockAuthentication = mock(Authentication.class);
         List<Transaction> transactions = getTransactions(LENGTH);
@@ -55,31 +65,13 @@ class RetrieveAllTransactionsStrategyTest {
         // stub
         when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
         when(mockAuthentication.getPrincipal()).thenReturn(AUTH_PRINCIPAL);
-        when(transactionDataService.findAllByUsername(USERNAME)).thenReturn(transactions);
+        when(transactionDataService.findAllByUsernameAndDate(eq(USERNAME), any(Date.class), eq(PAGE_NUMBER), eq(LENGTH))).thenReturn(transactions);
 
         // action & assert
-        List<TransactionDTO> transactionDTOS = retrieveAllTransactionsStrategy.retrieve(new RetrieveTransactionDTO());
+        List<TransactionDTO> transactionDTOS = retrieveTransactionByPageStrategy.retrieve(retrieveTransactionDTO);
         Assertions.assertNotNull(transactionDTOS);
         Assertions.assertEquals(LENGTH, transactionDTOS.size());
-        verify(transactionDataService, times(1)).findAllByUsername(USERNAME);
-    }
-
-    @Test
-    void retrieveWithNoTransactionsTest() {
-        // prepare
-        SecurityContext mockSecurityContext = mock(SecurityContext.class);
-        Authentication mockAuthentication = mock(Authentication.class);
-        SecurityContextHolder.setContext(mockSecurityContext);
-
-        // stub
-        when(mockSecurityContext.getAuthentication()).thenReturn(mockAuthentication);
-        when(mockAuthentication.getPrincipal()).thenReturn(AUTH_PRINCIPAL);
-
-        // action & assert
-        List<TransactionDTO> transactionDTOS = retrieveAllTransactionsStrategy.retrieve(new RetrieveTransactionDTO());
-        Assertions.assertNotNull(transactionDTOS);
-        Assertions.assertEquals(0, transactionDTOS.size());
-        verify(transactionDataService, times(1)).findAllByUsername(USERNAME);
+        verify(transactionDataService, times(1)).findAllByUsernameAndDate(anyString(), any(), anyInt(), anyInt());
     }
 
     @Test
@@ -88,10 +80,10 @@ class RetrieveAllTransactionsStrategyTest {
         SecurityContextHolder.clearContext();
 
         // action & assert
-        ExpenseTrackerException exception = Assertions.assertThrows(ExpenseTrackerException.class, () -> retrieveAllTransactionsStrategy.retrieve(new RetrieveTransactionDTO()));
+        ExpenseTrackerException exception = Assertions.assertThrows(ExpenseTrackerException.class, () -> retrieveTransactionByPageStrategy.retrieve(new RetrieveTransactionDTO()));
         Assertions.assertNotNull(exception);
         Assertions.assertNotNull(exception.getMessage());
-        Assertions.assertEquals(ErrorConstants.USERNAME_NULL_MESSAGE, exception.getMessage());
+        Assertions.assertEquals("Error: %s".formatted(ErrorConstants.USERNAME_NULL_MESSAGE), exception.getMessage());
         Assertions.assertEquals(ExpenseError.SERVER_ERROR, exception.getExpenseError());
     }
 
@@ -104,7 +96,7 @@ class RetrieveAllTransactionsStrategyTest {
     @Test
     void retrieveTypeTest() {
         // action & assert
-        RetrieveType retrieveType = retrieveAllTransactionsStrategy.retrieveType();
-        Assertions.assertEquals(RetrieveType.FETCH_ALL, retrieveType);
+        RetrieveType retrieveType = retrieveTransactionByPageStrategy.retrieveType();
+        Assertions.assertEquals(RetrieveType.FETCH_BY_PAGE, retrieveType);
     }
 }

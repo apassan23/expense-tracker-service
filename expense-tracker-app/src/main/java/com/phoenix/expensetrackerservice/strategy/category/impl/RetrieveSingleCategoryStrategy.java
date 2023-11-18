@@ -1,5 +1,6 @@
 package com.phoenix.expensetrackerservice.strategy.category.impl;
 
+import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.entity.Category;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
@@ -30,7 +31,7 @@ public class RetrieveSingleCategoryStrategy implements RetrieveCategoryStrategy 
     public List<CategoryDTO> retrieve(CategoryDTO categoryDTO) {
         String username = AuthUtils.getUsername();
         if (Objects.isNull(username)) {
-            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+            throw new ExpenseTrackerException(ErrorConstants.USERNAME_NULL_MESSAGE, ExpenseError.SERVER_ERROR);
         }
         String categoryId = categoryDTO.getCategoryId();
         Optional<Category> categoryOptional = categoryDataService.findByCategoryIdAndUsername(categoryId, username);
