@@ -59,6 +59,9 @@ class RetrieveAllCategoriesStrategyTest {
 
     @Test
     void retrieveThrowsServerExceptionTest() {
+        // prepare
+        SecurityContextHolder.clearContext();
+        
         // action & assert
         Assertions.assertThrows(ExpenseTrackerException.class, () -> retrieveAllCategoriesStrategy.retrieve(new CategoryDTO()));
     }
