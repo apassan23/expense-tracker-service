@@ -14,41 +14,14 @@ import java.util.Objects;
 public class TransactionRequestValidationServiceImpl implements TransactionRequestValidationService {
     @Override
     public void validateForCreate(TransactionDTO transactionDTO) {
-        if (Objects.nonNull(transactionDTO) &&
-                Objects.nonNull(transactionDTO.getTransactionName()) &&
-                Objects.nonNull(transactionDTO.getTransactionMonth()) &&
-                Objects.nonNull(transactionDTO.getTransactionType()) &&
-                Objects.nonNull(transactionDTO.getAmount()) &&
-                Objects.nonNull(transactionDTO.getAccount()) &&
-                Objects.nonNull(transactionDTO.getCategoryId()) &&
-                Objects.nonNull(transactionDTO.getNotes())
-        ) {
-            return;
-        }
-
-        throw new ExpenseTrackerBadRequestException(ErrorConstants.BAD_REQUEST_MESSAGE, ExpenseError.BAD_REQUEST);
+        validateTransaction(transactionDTO);
     }
 
     @Override
     public void validateForChange(TransactionDTO transactionDTO) {
-        if (Objects.nonNull(transactionDTO) &&
-                Objects.nonNull(transactionDTO.getTransactionId()) &&
-                Objects.nonNull(transactionDTO.getTransactionName()) &&
-                Objects.nonNull(transactionDTO.getTransactionMonth()) &&
-                Objects.nonNull(transactionDTO.getTransactionType()) &&
-                Objects.nonNull(transactionDTO.getAmount()) &&
-                Objects.nonNull(transactionDTO.getAccount()) &&
-                Objects.nonNull(transactionDTO.getCategoryId()) &&
-                Objects.nonNull(transactionDTO.getNotes())
-        ) {
-            return;
-        }
 
-        throw new ExpenseTrackerBadRequestException(ErrorConstants.BAD_REQUEST_MESSAGE, ExpenseError.BAD_REQUEST);
-    }
+        validateTransaction(transactionDTO);
 
-    @Override
-    public void validateForRetrieve(TransactionDTO transactionDTO) {
         if (Objects.nonNull(transactionDTO) &&
                 Objects.nonNull(transactionDTO.getTransactionId())) {
             return;
@@ -58,7 +31,18 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
     }
 
     @Override
+    public void validateForRetrieve(TransactionDTO transactionDTO) {
+        if (Objects.nonNull(transactionDTO.getTransactionId())) {
+            return;
+        }
+
+        throw new ExpenseTrackerBadRequestException(ErrorConstants.BAD_REQUEST_MESSAGE, ExpenseError.BAD_REQUEST);
+    }
+
+    @Override
     public void validateForRetrieve(RetrieveTransactionDTO retrieveTransactionDTO) {
+
+
         if (Objects.nonNull(retrieveTransactionDTO)) {
             if (Objects.isNull(retrieveTransactionDTO.getDate()) &&
                     Objects.isNull(retrieveTransactionDTO.getPageSize()) &&
@@ -79,6 +63,22 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
     public void validateForDelete(TransactionDTO transactionDTO) {
         if (Objects.nonNull(transactionDTO) &&
                 Objects.nonNull(transactionDTO.getTransactionId())) {
+            return;
+        }
+
+        throw new ExpenseTrackerBadRequestException(ErrorConstants.BAD_REQUEST_MESSAGE, ExpenseError.BAD_REQUEST);
+    }
+
+    private void validateTransaction(TransactionDTO transactionDTO) {
+        if (Objects.nonNull(transactionDTO) &&
+                Objects.nonNull(transactionDTO.getTransactionName()) &&
+                Objects.nonNull(transactionDTO.getTransactionMonth()) &&
+                Objects.nonNull(transactionDTO.getTransactionType()) &&
+                Objects.nonNull(transactionDTO.getAmount()) &&
+                Objects.nonNull(transactionDTO.getAccount()) &&
+                Objects.nonNull(transactionDTO.getCategoryId()) &&
+                Objects.nonNull(transactionDTO.getNotes())
+        ) {
             return;
         }
 

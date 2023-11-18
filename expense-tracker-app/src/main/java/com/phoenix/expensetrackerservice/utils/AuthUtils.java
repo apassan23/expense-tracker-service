@@ -24,8 +24,7 @@ public class AuthUtils {
                     return String.valueOf(username);
                 }
             }
-        } catch (Exception exception) {
-            return null;
+        } catch (Exception ignored) {
         }
         return null;
     }
