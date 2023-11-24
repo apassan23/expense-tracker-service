@@ -1,13 +1,14 @@
 package com.phoenix.expensetrackerservice.service.transaction.impl;
 
 import com.phoenix.expensetrackerservice.entity.Transaction;
+import com.phoenix.expensetrackerservice.exception.ExpenseTrackerBadRequestException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.TransactionDataService;
-import com.phoenix.expensetrackerservice.service.category.CategoryManagementService;
+import com.phoenix.expensetrackerservice.service.category.impl.CategoryManagementServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,12 +26,13 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ChangeTransactionServiceImplTest {
+class CreateTransactionServiceImplTest {
 
     private static final String USERNAME = "dummy.user";
     private static final String AUTH_PRINCIPAL = "{\"name\": \"%s\"}".formatted(USERNAME);
@@ -42,28 +44,29 @@ class ChangeTransactionServiceImplTest {
     @Mock
     private TransactionDataService transactionDataService;
     @Mock
-    private CategoryManagementService categoryManagementService;
+    private CategoryManagementServiceImpl categoryManagementService;
 
-    private ChangeTransactionServiceImpl changeTransactionService;
+    private CreateTransactionServiceImpl createTransactionService;
 
     @BeforeEach
-    void setup() {
-        changeTransactionService = new ChangeTransactionServiceImpl(transactionDataService, categoryManagementService);
+    public void setup() {
+        createTransactionService = spy(new CreateTransactionServiceImpl(transactionDataService, categoryManagementService));
     }
 
     @AfterEach
-    void cleanup() {
+    public void cleanup() {
         // clear security context after each test
         SecurityContextHolder.clearContext();
     }
 
     @Test
-    public void givenThrowsErrorWhenUsernameNullTest() {
+    public void givenWhenUsernameNullTest() {
+
         // prepare
         TransactionDTO transactionDTO = new TransactionDTO();
 
         // Action & Assert
-        ExpenseTrackerException exception = Assertions.assertThrows(ExpenseTrackerException.class, () -> changeTransactionService.given(transactionDTO));
+        ExpenseTrackerException exception = Assertions.assertThrows(ExpenseTrackerException.class, () -> createTransactionService.given(transactionDTO));
         Assertions.assertNotNull(exception);
         Assertions.assertNotNull(exception.getMessage());
         Assertions.assertNotNull(exception.getExpenseError());
@@ -72,21 +75,60 @@ class ChangeTransactionServiceImplTest {
 
     @Test
     public void givenThrowsErrorWhenTransactionNotFoundTest() {
+
         // prepare
+        Transaction transaction = new Transaction();
+
         TransactionDTO transactionDTO = new TransactionDTO();
-        transactionDTO.setTransactionId(TRANSACTION_ID);
+        transactionDTO.setTransactionName(TRANSACTION_NAME);
 
         setupSecurityContext();
 
         // mock
-        when(transactionDataService.findByTransactionIdAndUsername(TRANSACTION_ID, USERNAME)).thenReturn(Optional.empty());
+        when(transactionDataService.findByUsernameAndTransactionName(USERNAME, TRANSACTION_NAME)).thenReturn(Optional.of(transaction));
 
         // Action & Assert
-        ExpenseTrackerNotFoundException exception = Assertions.assertThrows(ExpenseTrackerNotFoundException.class, () -> changeTransactionService.given(transactionDTO));
+        ExpenseTrackerBadRequestException exception = Assertions.assertThrows(ExpenseTrackerBadRequestException.class, () -> createTransactionService.given(transactionDTO));
         Assertions.assertNotNull(exception);
         Assertions.assertNotNull(exception.getMessage());
         Assertions.assertNotNull(exception.getExpenseError());
-        Assertions.assertEquals(ExpenseError.TRANSACTION_NOT_PRESENT, exception.getExpenseError());
+        Assertions.assertEquals(ExpenseError.TRANSACTION_CREATE_ALREADY_EXISTS, exception.getExpenseError());
+
+        verify(transactionDataService, times(0)).save(any(Transaction.class));
+        verify(categoryManagementService, times(0)).retrieveCategory(anyString());
+    }
+
+    @Test
+    public void givenTest() {
+
+        // prepare
+        Date todayDate = new Date();
+
+        Transaction transaction = new Transaction();
+        transaction.setTransactionName(TRANSACTION_NAME);
+        transaction.setUsername(USERNAME);
+        transaction.setCategoryId(CATEGORY_ID);
+        transaction.setTransactionDate(todayDate);
+
+        TransactionDTO transactionDTO = new TransactionDTO();
+        transactionDTO.setTransactionName(TRANSACTION_NAME);
+        transactionDTO.setCategoryId(REQUEST_CATEGORY_ID);
+
+        setupSecurityContext();
+
+        // mock
+        when(transactionDataService.findByUsernameAndTransactionName(USERNAME, TRANSACTION_NAME)).thenReturn(Optional.empty());
+        when(transactionDataService.save(any(Transaction.class))).thenReturn(transaction);
+        when(categoryManagementService.retrieveCategory(REQUEST_CATEGORY_ID)).thenReturn(new CategoryDTO());
+
+        // Action & assert
+        TransactionDTO response = createTransactionService.given(transactionDTO);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(TRANSACTION_NAME, response.getTransactionName());
+        Assertions.assertEquals(CATEGORY_ID, response.getCategoryId());
+        Assertions.assertEquals(todayDate, response.getTransactionDate());
+
+        verify(categoryManagementService, times(1)).retrieveCategory(anyString());
     }
 
     @Test
@@ -100,84 +142,21 @@ class ChangeTransactionServiceImplTest {
         transaction.setTransactionDate(todayDate);
 
         TransactionDTO transactionDTO = new TransactionDTO();
-        transactionDTO.setTransactionId(TRANSACTION_ID);
-        transactionDTO.setCategoryId(REQUEST_CATEGORY_ID);
-
-        setupSecurityContext();
-
-        // mock
-        when(transactionDataService.findByTransactionIdAndUsername(TRANSACTION_ID, USERNAME)).thenReturn(Optional.of(transaction));
-        when(categoryManagementService.retrieveCategory(REQUEST_CATEGORY_ID)).thenReturn(null);
-
-        // Action & Assert
-        ExpenseTrackerNotFoundException exception = Assertions.assertThrows(ExpenseTrackerNotFoundException.class, () -> changeTransactionService.given(transactionDTO));
-        Assertions.assertNotNull(exception);
-        Assertions.assertNotNull(exception.getMessage());
-        Assertions.assertNotNull(exception.getExpenseError());
-        Assertions.assertEquals(ExpenseError.CATEGORY_DOES_NOT_EXISTS, exception.getExpenseError());
-    }
-
-    @Test
-    public void givenWhenCategoryIsEqualTest() {
-        // prepare
-        Date todayDate = new Date();
-
-        Transaction transaction = new Transaction();
-        transaction.setTransactionId(TRANSACTION_ID);
-        transaction.setUsername(USERNAME);
-        transaction.setCategoryId(CATEGORY_ID);
-        transaction.setTransactionDate(todayDate);
-
-        TransactionDTO transactionDTO = new TransactionDTO();
-        transactionDTO.setTransactionId(TRANSACTION_ID);
+        transactionDTO.setTransactionName(TRANSACTION_NAME);
         transactionDTO.setCategoryId(CATEGORY_ID);
 
         setupSecurityContext();
 
         // mock
-        when(transactionDataService.findByTransactionIdAndUsername(TRANSACTION_ID, USERNAME)).thenReturn(Optional.of(transaction));
-        when(transactionDataService.save(transaction)).thenReturn(transaction);
+        when(transactionDataService.findByUsernameAndTransactionName(USERNAME, TRANSACTION_NAME)).thenReturn(Optional.empty());
+        when(categoryManagementService.retrieveCategory(CATEGORY_ID)).thenReturn(null);
 
-        // Action & assert
-        TransactionDTO response = changeTransactionService.given(transactionDTO);
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(TRANSACTION_ID, response.getTransactionId());
-        Assertions.assertEquals(CATEGORY_ID, response.getCategoryId());
-        Assertions.assertEquals(todayDate, response.getTransactionDate());
-
-        verify(categoryManagementService, times(0)).retrieveCategory(anyString());
-    }
-
-    @Test
-    public void givenTest() {
-        // prepare
-        Date todayDate = new Date();
-
-        Transaction transaction = new Transaction();
-        transaction.setTransactionId(TRANSACTION_ID);
-        transaction.setUsername(USERNAME);
-        transaction.setCategoryId(CATEGORY_ID);
-        transaction.setTransactionDate(todayDate);
-
-        TransactionDTO transactionDTO = new TransactionDTO();
-        transactionDTO.setTransactionId(TRANSACTION_ID);
-        transactionDTO.setCategoryId(REQUEST_CATEGORY_ID);
-
-        setupSecurityContext();
-
-        // mock
-        when(transactionDataService.findByTransactionIdAndUsername(TRANSACTION_ID, USERNAME)).thenReturn(Optional.of(transaction));
-        when(transactionDataService.save(any(Transaction.class))).thenReturn(transaction);
-        when(categoryManagementService.retrieveCategory(REQUEST_CATEGORY_ID)).thenReturn(new CategoryDTO());
-
-        // Action & assert
-        TransactionDTO response = changeTransactionService.given(transactionDTO);
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(TRANSACTION_ID, response.getTransactionId());
-        Assertions.assertEquals(CATEGORY_ID, response.getCategoryId());
-        Assertions.assertEquals(todayDate, response.getTransactionDate());
-
-        verify(categoryManagementService, times(1)).retrieveCategory(anyString());
+        // Action & Assert
+        ExpenseTrackerNotFoundException exception = Assertions.assertThrows(ExpenseTrackerNotFoundException.class, () -> createTransactionService.given(transactionDTO));
+        Assertions.assertNotNull(exception);
+        Assertions.assertNotNull(exception.getMessage());
+        Assertions.assertNotNull(exception.getExpenseError());
+        Assertions.assertEquals(ExpenseError.CATEGORY_DOES_NOT_EXISTS, exception.getExpenseError());
     }
 
     private void setupSecurityContext() {

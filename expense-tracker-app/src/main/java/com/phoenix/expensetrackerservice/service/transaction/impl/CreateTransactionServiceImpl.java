@@ -50,7 +50,7 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
         return TransactionEntityBuilder.buildFromTransaction(transactionDataService.save(transaction));
     }
 
-    void checkIfCategoryExists(String categoryId) {
+    private void checkIfCategoryExists(String categoryId) {
         CategoryDTO category = categoryManagementService.retrieveCategory(categoryId);
         if (Objects.isNull(category)) {
             throw new ExpenseTrackerNotFoundException(ExpenseError.CATEGORY_DOES_NOT_EXISTS.getDescription(), ExpenseError.CATEGORY_DOES_NOT_EXISTS);
