@@ -17,8 +17,10 @@ public class AuthUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
             if (Objects.nonNull(authentication) && Objects.nonNull(authentication.getPrincipal())) {
+
                 Object principal = authentication.getPrincipal();
                 Map<String, Object> authDetails = JsonUtils.parse(String.valueOf(principal));
+
                 Object username = authDetails.get(NAME);
                 if (Objects.nonNull(username)) {
                     return String.valueOf(username);

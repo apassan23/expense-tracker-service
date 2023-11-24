@@ -11,7 +11,7 @@ public interface TransactionDataService {
 
     boolean existsByTransactionIdAndUsername(String transactionId, String username);
 
-    Optional<Transaction> findByTransactionIdAndUsername(String username, String transactionId);
+    Optional<Transaction> findByTransactionIdAndUsername(String transactionId, String username);
 
     Optional<Transaction> findByUsernameAndTransactionName(String username, String transactionName);
 

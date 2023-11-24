@@ -25,11 +25,13 @@ public class DeleteTransactionServiceImpl implements DeleteTransactionService {
         if (Objects.isNull(username)) {
             throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
         }
+
         // fetch the transaction by transaction id and username
         String transactionId = transactionDTO.getTransactionId();
         if (!transactionDataService.existsByTransactionIdAndUsername(transactionId, username)) {
             // throw an error if transaction does not exist
             throw new ExpenseTrackerNotFoundException(ExpenseError.TRANSACTION_NOT_PRESENT.getDescription(), ExpenseError.TRANSACTION_NOT_PRESENT);
+
         }
         // delete the transaction
         transactionDataService.deleteByTransactionId(transactionId);

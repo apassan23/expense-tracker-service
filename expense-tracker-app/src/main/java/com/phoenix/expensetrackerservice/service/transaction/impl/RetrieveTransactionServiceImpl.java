@@ -21,7 +21,9 @@ public class RetrieveTransactionServiceImpl implements RetrieveTransactionServic
 
     @Override
     public List<TransactionDTO> given(RetrieveTransactionDTO retrieveTransactionDTO) {
+
         RetrieveTransactionStrategy retrieveTransactionStrategy;
+
         if (Objects.nonNull(retrieveTransactionDTO.getTransactionId())) {
             retrieveTransactionStrategy = retrieveTransactionStrategyFactory.getStrategy(RetrieveType.FETCH_SINGLE_ENTITY);
         } else if (retrieveTransactionDTO.isFetchAll()) {
