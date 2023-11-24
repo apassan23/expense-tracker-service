@@ -32,11 +32,7 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
 
     @Override
     public void validateForRetrieve(TransactionDTO transactionDTO) {
-        if (Objects.nonNull(transactionDTO.getTransactionId())) {
-            return;
-        }
-
-        throw new ExpenseTrackerBadRequestException(ErrorConstants.BAD_REQUEST_MESSAGE, ExpenseError.BAD_REQUEST);
+        validateTransactionId(transactionDTO);
     }
 
     @Override
@@ -61,6 +57,10 @@ public class TransactionRequestValidationServiceImpl implements TransactionReque
 
     @Override
     public void validateForDelete(TransactionDTO transactionDTO) {
+        validateTransactionId(transactionDTO);
+    }
+
+    private void validateTransactionId(TransactionDTO transactionDTO) {
         if (Objects.nonNull(transactionDTO) &&
                 Objects.nonNull(transactionDTO.getTransactionId())) {
             return;

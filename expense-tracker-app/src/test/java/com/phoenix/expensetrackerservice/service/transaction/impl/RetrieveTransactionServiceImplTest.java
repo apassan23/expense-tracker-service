@@ -39,7 +39,7 @@ class RetrieveTransactionServiceImplTest {
 
     @ParameterizedTest
     @EnumSource(value = RetrieveType.class, names = {"FETCH_SINGLE_ENTITY", "FETCH_ALL", "FETCH_BY_PAGE"})
-    void givenShouldFetchSingleEntityTest(RetrieveType retrieveType) {
+    void givenTest(RetrieveType retrieveType) {
 
         // prepare
         RetrieveTransactionDTO retrieveTransactionDTO = new RetrieveTransactionDTO();
