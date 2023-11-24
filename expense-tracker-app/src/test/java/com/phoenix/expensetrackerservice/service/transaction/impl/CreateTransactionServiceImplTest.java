@@ -37,7 +37,6 @@ class CreateTransactionServiceImplTest {
     private static final String USERNAME = "dummy.user";
     private static final String AUTH_PRINCIPAL = "{\"name\": \"%s\"}".formatted(USERNAME);
     private static final String TRANSACTION_NAME = "TRANSACTION";
-    private static final String TRANSACTION_ID = "transactionId";
     private static final String CATEGORY_ID = "categoryId";
     private static final String REQUEST_CATEGORY_ID = "requestCategoryId";
 
