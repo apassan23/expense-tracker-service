@@ -71,6 +71,8 @@
                                 <exclude>**/model/**</exclude>
                                 <exclude>**/entity/**</exclude>
                                 <exclude>**/repository/**</exclude>
+                                <exclude>**/models/**</exclude>
+                                <exclude>**/LogAspect**</exclude>
                                 <exclude>**/ExpenseTrackerServiceApplication**</exclude>
                             </excludes>
                         </configuration>
