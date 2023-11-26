@@ -42,6 +42,14 @@ class AuthUtilsTest {
         Assertions.assertEquals(username, USERNAME);
     }
 
+    @Test
+    void getUsernameThrowsErrorTest() {
+        when(mockedAuthentication.getPrincipal()).thenThrow(RuntimeException.class);
+
+        String username = AuthUtils.getUsername();
+        Assertions.assertNull(username);
+    }
+
     @ParameterizedTest
     @NullSource
     @ValueSource(strings = EMPTY_AUTH_PRINCIPAL)
