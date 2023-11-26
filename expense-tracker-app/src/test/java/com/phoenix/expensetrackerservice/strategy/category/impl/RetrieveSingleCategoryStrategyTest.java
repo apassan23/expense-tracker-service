@@ -8,6 +8,7 @@ import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
 import com.phoenix.expensetrackerservice.service.CategoryDataService;
 import com.phoenix.expensetrackerservice.strategy.RetrieveType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,11 @@ class RetrieveSingleCategoryStrategyTest {
     @BeforeEach
     void setup() {
         retrieveSingleCategoryStrategy = spy(new RetrieveSingleCategoryStrategy(categoryDataService));
+    }
+
+    @AfterEach
+    void cleanup() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
