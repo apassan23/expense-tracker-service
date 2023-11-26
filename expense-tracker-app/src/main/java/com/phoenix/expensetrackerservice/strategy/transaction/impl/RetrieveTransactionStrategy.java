@@ -1,5 +1,6 @@
 package com.phoenix.expensetrackerservice.strategy.transaction.impl;
 
+import com.phoenix.expensetrackerservice.annotation.Log;
 import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.entity.Transaction;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
@@ -46,5 +47,14 @@ public class RetrieveTransactionStrategy implements com.phoenix.expensetrackerse
     @Override
     public RetrieveType retrieveType() {
         return RetrieveType.FETCH_SINGLE_ENTITY;
+    }
+
+    @Log(action = "testFunction")
+    void testFunction() {
+        final String test = "hello";
+
+        if (test.equals("hello")) {
+            test.replace("ello", "eart");
+        }
     }
 }
