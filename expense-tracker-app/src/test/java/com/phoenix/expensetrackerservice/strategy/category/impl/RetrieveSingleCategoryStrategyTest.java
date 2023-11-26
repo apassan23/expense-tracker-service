@@ -1,6 +1,8 @@
 package com.phoenix.expensetrackerservice.strategy.category.impl;
 
+import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.entity.Category;
+import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
@@ -59,6 +61,16 @@ class RetrieveSingleCategoryStrategyTest {
         Assertions.assertNotNull(categoryDTOS);
         Assertions.assertEquals(1, categoryDTOS.size());
         Assertions.assertEquals(CATEGORY_ID, categoryDTOS.stream().findFirst().orElseThrow().getCategoryId());
+    }
+
+    @Test
+    void retrieveWhenUsernameNullTest() {
+        CategoryDTO categoryDTO = CategoryDTO.builder().categoryId(CATEGORY_ID).build();
+
+        Exception exception = Assertions.assertThrows(ExpenseTrackerException.class, () -> retrieveSingleCategoryStrategy.retrieve(categoryDTO));
+        Assertions.assertNotNull(exception);
+        Assertions.assertNotNull(exception.getMessage());
+        Assertions.assertEquals(ErrorConstants.USERNAME_NULL_MESSAGE, exception.getMessage());
     }
 
     @Test
