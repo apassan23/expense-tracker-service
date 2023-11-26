@@ -79,6 +79,8 @@ class RetrieveTransactionByPageStrategyTest {
 
     @Test
     void retrieveWithNullUsernameTest() {
+        SecurityContextHolder.clearContext();
+
         // action & assert
         ExpenseTrackerException exception = Assertions.assertThrows(ExpenseTrackerException.class, () -> retrieveTransactionByPageStrategy.retrieve(new RetrieveTransactionDTO()));
         Assertions.assertNotNull(exception);
