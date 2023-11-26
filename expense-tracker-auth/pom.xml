@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.phoenix</groupId>
         <artifactId>expense-tracker-service</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>expense-tracker-auth</artifactId>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.phoenix</groupId>
             <artifactId>expense-tracker-commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

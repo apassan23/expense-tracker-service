@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Category1",
+    "description": "Category Description",
+    "group": "group"
+  },
+  {
+    "categoryId": "categoryId",
+    "title": "Category2",
+    "group": "group"
+  },
+  {
+    "categoryId": "categoryId",
+    "title": "Category3",
+    "description": "Category Description"
+  },
+  {
+    "categoryId": "categoryId",
+    "description": "Category Description",
+    "group": "group"
+  }
+]

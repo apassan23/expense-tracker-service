@@ -39,7 +39,7 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         categoryRequestValidationService.validateForCreate(categoryDTO);
         String username = AuthUtils.getUsername();
         if (Objects.isNull(username)) {
-            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+            throw new ExpenseTrackerException(ErrorConstants.USERNAME_NULL_MESSAGE, ExpenseError.SERVER_ERROR);
         }
         String categoryTitle = categoryDTO.getTitle();
         Optional<Category> categoryOptional = categoryDataService.findByTitleAndUsername(categoryTitle, username);
@@ -56,7 +56,7 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         String categoryId = categoryDTO.getCategoryId();
         String username = AuthUtils.getUsername();
         if (Objects.isNull(username)) {
-            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+            throw new ExpenseTrackerException(ErrorConstants.USERNAME_NULL_MESSAGE, ExpenseError.SERVER_ERROR);
         }
         Optional<Category> categoryOptional = categoryDataService.findByCategoryIdAndUsername(categoryId, username);
         if (categoryOptional.isEmpty()) {
@@ -94,10 +94,10 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
     public void deleteCategory(String categoryId) {
         String username = AuthUtils.getUsername();
         if (Objects.isNull(username)) {
-            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+            throw new ExpenseTrackerException(ErrorConstants.USERNAME_NULL_MESSAGE, ExpenseError.SERVER_ERROR);
         }
         CategoryDTO categoryDTO = CategoryBuilder.buildFromCategoryId(categoryId);
-        categoryRequestValidationService.validateForRetrieve(categoryDTO);
+        categoryRequestValidationService.validateForDelete(categoryDTO);
         if (!categoryDataService.existsByCategoryIdAndUsername(categoryId, username)) {
             throw new ExpenseTrackerNotFoundException(ExpenseError.CATEGORY_DOES_NOT_EXISTS.getDescription(), ExpenseError.CATEGORY_DOES_NOT_EXISTS);
         }

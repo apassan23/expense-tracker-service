@@ -10,6 +10,7 @@ import com.phoenix.expensetrackerservice.utils.AuthUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
 public class DeleteTransactionServiceImpl implements DeleteTransactionService {
@@ -25,14 +26,23 @@ public class DeleteTransactionServiceImpl implements DeleteTransactionService {
         if (Objects.isNull(username)) {
             throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
         }
-        // fetch the transaction by transaction id and username
+
         String transactionId = transactionDTO.getTransactionId();
-        if (!transactionDataService.existsByTransactionIdAndUsername(transactionId, username)) {
-            // throw an error if transaction does not exist
-            throw new ExpenseTrackerNotFoundException(ExpenseError.TRANSACTION_NOT_PRESENT.getDescription(), ExpenseError.TRANSACTION_NOT_PRESENT);
-        }
+        handleTransactionDoesNotExists(transactionId, username);
+
         // delete the transaction
         transactionDataService.deleteByTransactionId(transactionId);
+
         return transactionDTO;
+    }
+
+    private void handleTransactionDoesNotExists(String transactionId, String username) {
+
+        AtomicBoolean transactionExists = new AtomicBoolean(transactionDataService.existsByTransactionIdAndUsername(transactionId, username));
+
+        // throw an error if transaction does not exist
+        if (!transactionExists.get()) {
+            throw new ExpenseTrackerNotFoundException(ExpenseError.TRANSACTION_NOT_PRESENT.getDescription(), ExpenseError.TRANSACTION_NOT_PRESENT);
+        }
     }
 }

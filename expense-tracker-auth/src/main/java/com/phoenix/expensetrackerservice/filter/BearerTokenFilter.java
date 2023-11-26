@@ -36,7 +36,9 @@ public class BearerTokenFilter extends OncePerRequestFilter {
             if (Objects.isNull(header)) {
                 throw new ExpenseTrackerException("Auth Header is Missing!", ExpenseError.BAD_REQUEST);
             }
+
             authToken = header.replace(AuthConstants.TOKEN_PREFIX, "");
+            
             Authentication authentication = tokenValidatorService.validateToken(authToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {

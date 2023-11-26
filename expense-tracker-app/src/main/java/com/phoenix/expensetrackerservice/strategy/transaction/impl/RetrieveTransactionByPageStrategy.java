@@ -1,5 +1,6 @@
 package com.phoenix.expensetrackerservice.strategy.transaction.impl;
 
+import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.entity.Transaction;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
@@ -32,7 +33,7 @@ public class RetrieveTransactionByPageStrategy implements RetrieveTransactionStr
         String username = AuthUtils.getUsername();
         try {
             if (Objects.isNull(username)) {
-                throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
+                throw new ExpenseTrackerException(ErrorConstants.USERNAME_NULL_MESSAGE, ExpenseError.SERVER_ERROR);
             }
             Date date = DateUtils.parse(retrieveTransactionDTO.getDate());
             Integer pageNumber = retrieveTransactionDTO.getPageNumber();

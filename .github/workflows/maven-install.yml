@@ -8,7 +8,9 @@
 
 name: Java CI with Maven
 
-on: [ pull_request ]
+on: 
+  push:
+    branches-ignore: [ main ]
 
 jobs:
   build:
@@ -25,6 +27,36 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn clean install --file pom.xml
+    - name: JaCoCo Code Coverage Report
+      id: jacoco_reporter
+      uses: PavanMudigonda/jacoco-reporter@v4.8
+      with:
+        coverage_results_path: coverage/target/site/jacoco-aggregate/jacoco.xml
+        coverage_report_name: Coverage
+        coverage_report_title: Coverage Report
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        skip_check_run: false
+        minimum_coverage: 80
+        fail_below_threshold: false
+        publish_only_summary: false
+    - name: Jacoco Report to PR
+      id: jacoco
+      uses: madrapps/jacoco-report@v1.6.1
+      with:
+        paths: coverage/target/site/jacoco-aggregate/jacoco.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        min-coverage-overall: 40
+        min-coverage-changed-files: 60
+        debug-mode: true
+    - name: Get the Coverage info
+      run: |
+        echo "Total coverage coverage-overall ${{ steps.jacoco.outputs.coverage-overall }}"
+        echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
+        echo "Coverage coveragePercentage ${{ steps.jacoco_reporter.outputs.coveragePercentage }}"
+        echo "Coverage coveragePercentageString ${{ steps.jacoco_reporter.outputs.coveragePercentageString }}"
+
+    - name: Publish Coverager Workflow Build Summary
+      run: echo "${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_STEP_SUMMARY
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph

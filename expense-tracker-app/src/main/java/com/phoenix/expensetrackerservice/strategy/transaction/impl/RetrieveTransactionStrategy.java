@@ -1,5 +1,6 @@
 package com.phoenix.expensetrackerservice.strategy.transaction.impl;
 
+import com.phoenix.expensetrackerservice.constants.ErrorConstants;
 import com.phoenix.expensetrackerservice.entity.Transaction;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
@@ -31,7 +32,7 @@ public class RetrieveTransactionStrategy implements com.phoenix.expensetrackerse
         String transactionId = retrieveTransactionDTO.getTransactionId();
         String username = AuthUtils.getUsername();
         if (Objects.isNull(username)) {
-            throw new ExpenseTrackerException("Username is Null!", ExpenseError.SERVER_ERROR);
+            throw new ExpenseTrackerException(ErrorConstants.USERNAME_NULL_MESSAGE, ExpenseError.SERVER_ERROR);
         }
         Optional<Transaction> transaction = transactionDataService.findByTransactionIdAndUsername(transactionId, username);
         // transaction retrieve response is empty
