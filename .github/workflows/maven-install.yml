@@ -37,7 +37,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         skip_check_run: false
         minimum_coverage: 80
-        fail_below_threshold: false
+        fail_below_threshold: true
         publish_only_summary: false
     - name: Jacoco Report to PR
       id: jacoco
@@ -45,9 +45,11 @@ jobs:
       with:
         paths: coverage/target/site/jacoco-aggregate/jacoco.xml
         token: ${{ secrets.GITHUB_TOKEN }}
-        min-coverage-overall: 40
-        min-coverage-changed-files: 60
+        min-coverage-overall: 80
+        min-coverage-changed-files: 80
         debug-mode: true
+        continue-on-error: false
+        title: Coverage Summary
     - name: Get the Coverage info
       run: |
         echo "Total coverage coverage-overall ${{ steps.jacoco.outputs.coverage-overall }}"
@@ -55,8 +57,15 @@ jobs:
         echo "Coverage coveragePercentage ${{ steps.jacoco_reporter.outputs.coveragePercentage }}"
         echo "Coverage coveragePercentageString ${{ steps.jacoco_reporter.outputs.coveragePercentageString }}"
 
-    - name: Publish Coverager Workflow Build Summary
+    - name: Publish Coverage Workflow Build Summary
       run: echo "${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_STEP_SUMMARY
+
+    - name: Fail PR if overall coverage is less than 80%
+      if: ${{ steps.jacoco.outputs.coverage-overall < 80.0 }}
+      uses: actions/github-script@v6
+      with:
+        script: |
+          core.setFailed('Overall coverage is less than 80%!')
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
