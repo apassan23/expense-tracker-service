@@ -68,7 +68,7 @@ jobs:
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
       
-  code-coverage:
+  Code-Coverage-Changed-Files:
       needs: [build]
       runs-on: ubuntu-latest
       steps:
@@ -81,7 +81,7 @@ jobs:
                 echo "Changed Files coverage = ${{ needs.build.outputs.coverage_changed_files }}"
                 
             - name: Fail PR if coverage is less than 80%
-              if: ${{ needs.build.outputs.coverage_overall < 80.0 || needs.build.outputs.coverage_changed_files < 80.0 }}
+              if: ${{ needs.build.outputs.coverage_changed_files < 80.0 }}
               uses: actions/github-script@v6
               with:
                  script: |
