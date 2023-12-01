@@ -12,6 +12,11 @@ on:
   push:
     branches-ignore: [ main ]
 
+env:
+  coverage_overall: 0
+  coverage_changed_files: 0
+
+
 jobs:
   build:
 
