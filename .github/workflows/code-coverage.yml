@@ -1,0 +1,19 @@
+name: Code Coverage
+
+on: 
+  push:
+    branches-ignore: [ main ]
+  workflow_run:
+    workflows: [build]
+    types: [completed]
+
+jobs:
+  code-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail PR if coverage is less than 80%
+        if: ${{ steps.jacoco.outputs.coverage-overall < 80.0 || steps.jacoco.outputs.coverage-changed-files < 80.0 }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.setFailed('Code coverage is less than 80%!')
