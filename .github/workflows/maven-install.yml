@@ -12,15 +12,16 @@ on:
   push:
     branches-ignore: [ main ]
 
-env:
-  coverage_overall: 0
-  coverage_changed_files: 0
-
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+
+    outputs:
+      coverage_overall: ${{ steps.coverage-output.outputs.coverage_overall }}
+      coverage_changed_files: ${{ steps.coverage-output.outputs.coverage_changed_files }}
+      coverageSummary: ${{ steps.coverage-output.outputs.coverageSummary }}
 
     steps:
     - uses: actions/checkout@v3
@@ -56,12 +57,12 @@ jobs:
         continue-on-error: false
         title: Coverage Summary
 
-    - name: Set Env Vars
-      id: env-vars
+    - name: Set Coverage Output
+      id: coverage-output
       run: |
-        echo "coverage_overall=${{ steps.jacoco.outputs.coverage-overall }}" >> "$GITHUB_ENV"
-        echo "coverage_changed_files=${{ steps.jacoco.outputs.coverage-changed-files }}" >> "$GITHUB_ENV"
-        echo "coverageSummary=${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_ENV
+        echo "coverage_overall=${{ steps.jacoco.outputs.coverage-overall }}" >> "$GITHUB_OUTPUT"
+        echo "coverage_changed_files=${{ steps.jacoco.outputs.coverage-changed-files }}" >> "$GITHUB_OUTPUT"
+        echo "coverageSummary=${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_OUTPUT
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
@@ -72,15 +73,15 @@ jobs:
       runs-on: ubuntu-latest
       steps:
             - name: Publish Coverage Workflow Build Summary
-              run: echo "$coverageSummary" >> $GITHUB_STEP_SUMMARY
+              run: echo ${{ needs.build.outputs.coverageSummary }} >> $GITHUB_STEP_SUMMARY
               
             - name: Get the Coverage info
               run: |
-                echo "Total coverage coverage-overall = $coverage_overall"
-                echo "Changed Files coverage = $coverage_changed_files"
+                echo "Total coverage = ${{ needs.build.outputs.coverage_overall }}"
+                echo "Changed Files coverage = ${{ needs.build.outputs.coverage_changed_files }}"
                 
             - name: Fail PR if coverage is less than 80%
-              if: ${{ env.coverage_overall < 80.0 || env.coverage_changed_files < 80.0 }}
+              if: ${{ needs.build.outputs.coverage_overall < 80.0 || needs.build.outputs.coverage_changed_files < 80.0 }}
               uses: actions/github-script@v6
               with:
                  script: |
