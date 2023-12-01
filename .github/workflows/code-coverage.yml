@@ -1,8 +1,6 @@
 name: Code Coverage
 
 on: 
-  push:
-    branches-ignore: [ main ]
   workflow_run:
     workflows: [build]
     types: [completed]
