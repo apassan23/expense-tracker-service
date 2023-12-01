@@ -2,7 +2,7 @@ name: Code Coverage
 
 on: 
   workflow_run:
-    workflows: [build]
+    workflows: [Java CI with Maven]
     types: [completed]
 
 jobs:
