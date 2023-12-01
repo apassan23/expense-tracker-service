@@ -54,8 +54,8 @@ jobs:
     - name: Set Env Vars
       id: env-vars
       run: |
-        echo "coverage-overall=${{ steps.jacoco.outputs.coverage-overall }}" >> "$GITHUB_ENV"
-        echo "coverage-changed-files=${{ steps.jacoco.outputs.coverage-changed-files }}" >> "$GITHUB_ENV"
+        echo "coverage_overall=${{ steps.jacoco.outputs.coverage-overall }}" >> "$GITHUB_ENV"
+        echo "coverage_changed_files=${{ steps.jacoco.outputs.coverage-changed-files }}" >> "$GITHUB_ENV"
         echo "coverageSummary=${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_ENV
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
@@ -71,11 +71,11 @@ jobs:
               
             - name: Get the Coverage info
               run: |
-                echo "Total coverage coverage-overall = $coverage-overall"
-                echo "Changed Files coverage = $coverage-changed-files"
+                echo "Total coverage coverage-overall = $coverage_overall"
+                echo "Changed Files coverage = $coverage_changed_files"
                 
             - name: Fail PR if coverage is less than 80%
-              if: ${{ env.coverage-overall < 80.0 || env.coverage-changed-files < 80.0 }}
+              if: ${{ env.coverage_overall < 80.0 || env.coverage_changed_files < 80.0 }}
               uses: actions/github-script@v6
               with:
                  script: |
