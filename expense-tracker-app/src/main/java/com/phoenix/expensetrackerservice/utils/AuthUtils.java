@@ -30,4 +30,9 @@ public class AuthUtils {
         }
         return null;
     }
+
+    public static void doTest() {
+        String testString = "Test String";
+        testString = testString.replace("Test", "Do Something");
+    }
 }
