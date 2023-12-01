@@ -34,5 +34,7 @@ public class AuthUtils {
     public static void doTest() {
         String testString = "Test String";
         testString = testString.replace("Test", "Do Something");
+        testString = testString.replace("Test", "Do Something Else");
+        testString = testString.replace("Test", "Do not Something Else");
     }
 }
