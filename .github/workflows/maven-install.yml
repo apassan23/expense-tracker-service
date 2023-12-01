@@ -56,6 +56,7 @@ jobs:
       run: |
         echo "coverage-overall=${{ steps.jacoco.outputs.coverage-overall }}" >> "$GITHUB_ENV"
         echo "coverage-changed-files=${{ steps.jacoco.outputs.coverage-changed-files }}" >> "$GITHUB_ENV"
+        echo "coverageSummary=${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_ENV
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
@@ -66,7 +67,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
             - name: Publish Coverage Workflow Build Summary
-              run: echo "${{ steps.jacoco_reporter.outputs.coverageSummary }}" >> $GITHUB_STEP_SUMMARY
+              run: echo "$coverageSummary" >> $GITHUB_STEP_SUMMARY
               
             - name: Get the Coverage info
               run: |
@@ -74,7 +75,7 @@ jobs:
                 echo "Changed Files coverage = $coverage-changed-files"
                 
             - name: Fail PR if coverage is less than 80%
-              if: ${{ coverage-overall < 80.0 || coverage-changed-files < 80.0 }}
+              if: ${{ env.coverage-overall < 80.0 || env.coverage-changed-files < 80.0 }}
               uses: actions/github-script@v6
               with:
                  script: |
