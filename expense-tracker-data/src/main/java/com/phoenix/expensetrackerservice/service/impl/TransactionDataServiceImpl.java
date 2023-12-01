@@ -66,7 +66,7 @@ public class TransactionDataServiceImpl implements TransactionDataService {
     }
 
     @Override
-    public void deleteByTransactionId(String transactionId) {
+    public void deleteByTransactionIdAndUsername(String transactionId, String username) {
         transactionRepository.deleteById(transactionId);
     }
 

@@ -31,7 +31,7 @@ public class DeleteTransactionServiceImpl implements DeleteTransactionService {
         handleTransactionDoesNotExists(transactionId, username);
 
         // delete the transaction
-        transactionDataService.deleteByTransactionId(transactionId);
+        transactionDataService.deleteByTransactionIdAndUsername(transactionId, username);
 
         return transactionDTO;
     }
