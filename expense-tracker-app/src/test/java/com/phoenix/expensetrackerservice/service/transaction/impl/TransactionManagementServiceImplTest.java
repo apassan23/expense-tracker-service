@@ -61,7 +61,9 @@ class TransactionManagementServiceImplTest {
 
     @BeforeEach
     void setup() {
-        transactionManagementService = spy(new TransactionManagementServiceImpl(createTransactionService, changeTransactionService, deleteTransactionService, retrieveTransactionService, transactionRequestValidationService));
+        transactionManagementService = spy(
+                new TransactionManagementServiceImpl(createTransactionService, changeTransactionService,
+                        deleteTransactionService, retrieveTransactionService, transactionRequestValidationService));
     }
 
     @Test
@@ -94,10 +96,12 @@ class TransactionManagementServiceImplTest {
         TransactionDTO transactionDTO = new TransactionDTO();
 
         // mock
-        doThrow(ExpenseTrackerException.class).when(transactionRequestValidationService).validateForCreate(transactionDTO);
+        doThrow(ExpenseTrackerException.class).when(transactionRequestValidationService)
+                .validateForCreate(transactionDTO);
 
         // Action & assert
-        Assertions.assertThrows(ExpenseTrackerException.class, () -> transactionManagementService.createTransaction(transactionDTO));
+        Assertions.assertThrows(ExpenseTrackerException.class,
+                () -> transactionManagementService.createTransaction(transactionDTO));
 
         verify(createTransactionService, times(0)).given(transactionDTO);
     }
@@ -128,11 +132,12 @@ class TransactionManagementServiceImplTest {
     @Test
     void retrieveTransactionThrowsErrorTest() {
         // mock
-        doThrow(ExpenseTrackerException.class).when(transactionRequestValidationService).validateForRetrieve(any(RetrieveTransactionDTO.class));
-
+        doThrow(ExpenseTrackerException.class).when(transactionRequestValidationService)
+                .validateForRetrieve(any(RetrieveTransactionDTO.class));
 
         // Action & assert
-        Assertions.assertThrows(ExpenseTrackerException.class, () -> transactionManagementService.retrieveTransaction(TRANSACTION_ID));
+        Assertions.assertThrows(ExpenseTrackerException.class,
+                () -> transactionManagementService.retrieveTransaction(TRANSACTION_ID));
 
         verify(retrieveTransactionService, times(0)).given(any(RetrieveTransactionDTO.class));
     }
@@ -203,10 +208,12 @@ class TransactionManagementServiceImplTest {
         TransactionDTO transactionDTO = TRANSACTIONS.stream().findFirst().orElseThrow();
 
         // mock
-        doThrow(ExpenseTrackerException.class).when(transactionRequestValidationService).validateForChange(transactionDTO);
+        doThrow(ExpenseTrackerException.class).when(transactionRequestValidationService)
+                .validateForChange(transactionDTO);
 
         // Action & assert
-        Assertions.assertThrows(ExpenseTrackerException.class, () -> transactionManagementService.changeTransaction(transactionDTO));
+        Assertions.assertThrows(ExpenseTrackerException.class,
+                () -> transactionManagementService.changeTransaction(transactionDTO));
 
         verify(changeTransactionService, times(0)).given(transactionDTO);
     }
@@ -224,10 +231,12 @@ class TransactionManagementServiceImplTest {
     @Test
     void deleteTransactionThrowsErrorTest() {
         // mock
-        doThrow(ExpenseTrackerException.class).when(transactionRequestValidationService).validateForDelete(any(TransactionDTO.class));
+        doThrow(ExpenseTrackerException.class).when(transactionRequestValidationService)
+                .validateForDelete(any(TransactionDTO.class));
 
         // Action & assert
-        Assertions.assertThrows(ExpenseTrackerException.class, () -> transactionManagementService.deleteTransaction(TRANSACTION_ID));
+        Assertions.assertThrows(ExpenseTrackerException.class,
+                () -> transactionManagementService.deleteTransaction(TRANSACTION_ID));
 
         verify(deleteTransactionService, times(0)).given(any(TransactionDTO.class));
     }
