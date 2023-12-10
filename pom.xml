@@ -20,6 +20,7 @@
         <module>expense-tracker-data</module>
         <module>expense-tracker-aop</module>
         <module>expense-tracker-auth</module>
+        <module>expense-tracker-integration-tests</module>
         <module>coverage</module>
     </modules>
     <properties>
