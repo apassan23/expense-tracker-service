@@ -51,6 +51,7 @@ public class CommonUtils {
     public static MockedTransactionDetails buildMockedTransactionDetails(Transaction transaction) {
         return MockedTransactionDetails.builder()
                 .transactionId(transaction.getTransactionId())
+                .categoryId(transaction.getCategoryId())
                 .build();
     }
 

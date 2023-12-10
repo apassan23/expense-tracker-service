@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MockedTransactionDetails {
     private String transactionId;
+    private String categoryId;
 }

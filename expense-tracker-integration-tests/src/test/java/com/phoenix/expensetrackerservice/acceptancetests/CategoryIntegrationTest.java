@@ -89,7 +89,7 @@ public class CategoryIntegrationTest extends RunConfiguration {
 
     @Test
     @DisplayName("Create Category - Invalid Auth Response (No username)")
-    @Order(1)
+    @Order(2)
     public void createCategoryInvalidAuthResponseTest() throws Exception {
         String createCategoryRequest = CategoryRequestAgent.fetchCreateCategoryFailureRequest();
 
