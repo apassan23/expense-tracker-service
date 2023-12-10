@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phoenix.expensetrackerservice.constants.AuthConstants;
+import com.phoenix.expensetrackerservice.constants.IntegrationTestConstants;
 import com.phoenix.expensetrackerservice.entity.Category;
+import com.phoenix.expensetrackerservice.entity.Transaction;
 import com.phoenix.expensetrackerservice.model.MockedCategoryDetails;
+import com.phoenix.expensetrackerservice.model.MockedTransactionDetails;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpMethod;
@@ -15,13 +18,13 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @UtilityClass
 public class CommonUtils {
 
-    private static final String USERNAME = "test.user";
-    private static final String AUTH_PRINCIPAL = "{ \"name\": \"%s\"}".formatted(USERNAME);
+    private static final String AUTH_PRINCIPAL = "{ \"name\": \"%s\"}".formatted(IntegrationTestConstants.USERNAME);
     private static final ObjectMapper objectMapper;
 
     static {
@@ -43,6 +46,17 @@ public class CommonUtils {
                 .title(category.getTitle())
                 .username(category.getUsername())
                 .build();
+    }
+
+    public static MockedTransactionDetails buildMockedTransactionDetails(Transaction transaction) {
+        return MockedTransactionDetails.builder()
+                .transactionId(transaction.getTransactionId())
+                .build();
+    }
+
+    public static String todaysDate() {
+        ZonedDateTime date = ZonedDateTime.now();
+        return String.format("%s-%s-%s", date.getYear(), date.getMonthValue(), date.getDayOfMonth());
     }
 
     public static <T> T parse(String content, Class<? extends T> expectedType) throws JsonProcessingException {

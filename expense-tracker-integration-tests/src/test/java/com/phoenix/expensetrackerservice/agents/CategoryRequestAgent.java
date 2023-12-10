@@ -14,6 +14,10 @@ public class CategoryRequestAgent {
         return CommonUtils.readJson(IntegrationTestConstants.CREATE_CATEGORY_HAPPY_PATH);
     }
 
+    public static String fetchCreateCategoryForTransactionRequest() throws IOException {
+        return CommonUtils.readJson(IntegrationTestConstants.CREATE_CATEGORY_FOR_TRANSACTION_PATH);
+    }
+
     public static String fetchCreateCategoryFailureRequest() throws IOException {
         return CommonUtils.readJson(IntegrationTestConstants.CREATE_CATEGORY_FAILURE_PATH);
     }

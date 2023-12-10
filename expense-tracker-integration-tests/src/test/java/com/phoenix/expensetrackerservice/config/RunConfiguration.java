@@ -9,6 +9,7 @@ import com.phoenix.expensetrackerservice.constants.IntegrationTestConstants;
 import com.phoenix.expensetrackerservice.constants.WiremockConstants;
 import com.phoenix.expensetrackerservice.model.AuthServiceResponse;
 import com.phoenix.expensetrackerservice.model.MockedCategoryDetails;
+import com.phoenix.expensetrackerservice.model.MockedTransactionDetails;
 import com.phoenix.expensetrackerservice.utils.CommonUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -46,6 +47,7 @@ public abstract class RunConfiguration {
 
     private static WireMockServer wireMockServer;
     protected static Map<String, MockedCategoryDetails> mockedCategoryDetailsMap = new ConcurrentHashMap<>();
+    protected static Map<String, MockedTransactionDetails> mockedTransactionDetailsMap = new ConcurrentHashMap<>();
 
     @Autowired
     protected TransactionRepositoryIT transactionRepository;

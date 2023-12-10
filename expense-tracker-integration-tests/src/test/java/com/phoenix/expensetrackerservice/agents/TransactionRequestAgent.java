@@ -11,7 +11,18 @@ import java.io.IOException;
 public class TransactionRequestAgent {
 
     public static String fetchCreateTransactionRequest(String categoryId) throws IOException {
-        String contents = CommonUtils.readJson(IntegrationTestConstants.CREATE_TRANSACTION_HAPPY_PATH);
-        return contents.replace(IntegrationTestConstants.CATEGORY_ID_PLACEHOLDER, categoryId);
+        return CommonUtils.readJson(IntegrationTestConstants.CREATE_TRANSACTION_HAPPY_PATH)
+                .replace(IntegrationTestConstants.CATEGORY_ID_PLACEHOLDER, categoryId);
+    }
+
+    public static String fetchRetrieveTransactionRequest(String date, Integer pageSize, Integer pageNumber) throws IOException {
+        return CommonUtils.readJson(IntegrationTestConstants.RETRIEVE_TRANSACTION_HAPPY_PATH)
+                .replace(IntegrationTestConstants.DATE_PLACEHOLDER, date)
+                .replace(IntegrationTestConstants.PAGE_NUMBER_PLACEHOLDER, String.valueOf(pageNumber))
+                .replace(IntegrationTestConstants.PAGE_SIZE_PLACEHOLDER, String.valueOf(pageSize));
+    }
+
+    public static String fetchRetrieveTransactionRequest() throws IOException {
+        return "{}";
     }
 }
