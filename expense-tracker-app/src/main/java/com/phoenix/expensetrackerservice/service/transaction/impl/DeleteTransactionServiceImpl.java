@@ -1,19 +1,16 @@
 package com.phoenix.expensetrackerservice.service.transaction.impl;
 
-import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.TransactionDataService;
-import com.phoenix.expensetrackerservice.service.transaction.DeleteTransactionService;
-import com.phoenix.expensetrackerservice.utils.AuthUtils;
+import com.phoenix.expensetrackerservice.service.transaction.TransactionService;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Service
-public class DeleteTransactionServiceImpl implements DeleteTransactionService {
+public class DeleteTransactionServiceImpl extends TransactionService {
     private final TransactionDataService transactionDataService;
 
     public DeleteTransactionServiceImpl(TransactionDataService transactionDataService) {
@@ -21,11 +18,7 @@ public class DeleteTransactionServiceImpl implements DeleteTransactionService {
     }
 
     @Override
-    public TransactionDTO given(TransactionDTO transactionDTO) {
-        String username = AuthUtils.getUsername();
-        if (Objects.isNull(username)) {
-            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
-        }
+    public TransactionDTO given(TransactionDTO transactionDTO, String username) {
 
         String transactionId = transactionDTO.getTransactionId();
         handleTransactionDoesNotExists(transactionId, username);

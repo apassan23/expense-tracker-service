@@ -1,42 +1,43 @@
 package com.phoenix.expensetrackerservice.strategy.utils.impl;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.format.datetime.DateFormatter;
 
 import java.util.Date;
+import java.util.Locale;
 
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class DateParserStrategyImplTest {
 
-    @Test
-    void withDefaultPatternTest() {
-        // prepare
-        final String DATE = "1999-02-23";
-        DateParserStrategyImpl dateParserStrategy = DateParserStrategyImpl.withDefaultPattern();
+    @Mock
+    private DateFormatter dateFormatter;
 
-        // actions & assert
-        Date date = Assertions.assertDoesNotThrow(() -> dateParserStrategy.parse(DATE));
-        Assertions.assertNotNull(date);
+    private DateParserStrategyImpl dateParserStrategy;
+
+    @BeforeEach
+    void setup() {
+        dateParserStrategy = spy(new DateParserStrategyImpl(dateFormatter));
     }
 
     @Test
-    void withPatternTest() {
+    void parseTest() throws Exception {
         // prepare
-        final String DATE = "23-02-1999";
-        final String PATTERN = "dd-MM-yyyy";
-        DateParserStrategyImpl dateParserStrategy = DateParserStrategyImpl.withPattern(PATTERN);
+        Date date = new Date();
+        String dateString = "23-02-1999";
 
-        // actions & assert
-        Date date = Assertions.assertDoesNotThrow(() -> dateParserStrategy.parse(DATE));
-        Assertions.assertNotNull(date);
-    }
+        // mock
+        when(dateFormatter.parse(dateString, Locale.getDefault())).thenReturn(date);
 
-    @Test
-    void withDefaultPatternWithWrongPatternTest() {
-        // prepare
-        final String DATE = "23-02-1999";
-        DateParserStrategyImpl dateParserStrategy = DateParserStrategyImpl.withDefaultPattern();
-
-        // actions & assert
-        Assertions.assertThrows(Exception.class, () -> dateParserStrategy.parse(DATE));
+        // Action & assert
+        Date actualDate = dateParserStrategy.parse(dateString);
+        Assertions.assertEquals(date, actualDate);
     }
 }

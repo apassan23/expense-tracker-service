@@ -1,7 +1,7 @@
 package com.phoenix.expensetrackerservice.utils;
 
 import com.phoenix.expensetrackerservice.strategy.utils.DateParserStrategy;
-import com.phoenix.expensetrackerservice.strategy.utils.impl.DateParserStrategyImpl;
+import com.phoenix.expensetrackerservice.strategy.utils.factory.DateParserStrategyFactory;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,7 @@ public class DateUtils {
     private static final DateParserStrategy dateParserStrategy;
 
     static {
-        dateParserStrategy = DateParserStrategyImpl.withDefaultPattern();
+        dateParserStrategy = DateParserStrategyFactory.withDefaultPattern();
     }
 
     public static Date parse(String date) throws Exception {

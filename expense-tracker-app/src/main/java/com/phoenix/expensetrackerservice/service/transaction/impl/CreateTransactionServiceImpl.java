@@ -2,23 +2,21 @@ package com.phoenix.expensetrackerservice.service.transaction.impl;
 
 import com.phoenix.expensetrackerservice.entity.Transaction;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerBadRequestException;
-import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
 import com.phoenix.expensetrackerservice.model.CategoryDTO;
 import com.phoenix.expensetrackerservice.model.TransactionDTO;
 import com.phoenix.expensetrackerservice.service.TransactionDataService;
 import com.phoenix.expensetrackerservice.service.category.CategoryManagementService;
-import com.phoenix.expensetrackerservice.service.transaction.CreateTransactionService;
+import com.phoenix.expensetrackerservice.service.transaction.TransactionService;
 import com.phoenix.expensetrackerservice.transform.TransactionEntityBuilder;
-import com.phoenix.expensetrackerservice.utils.AuthUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class CreateTransactionServiceImpl implements CreateTransactionService {
+public class CreateTransactionServiceImpl extends TransactionService {
     private final TransactionDataService transactionDataService;
     private final CategoryManagementService categoryManagementService;
 
@@ -28,11 +26,7 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
     }
 
     @Override
-    public TransactionDTO given(TransactionDTO transactionDTO) {
-        String username = AuthUtils.getUsername();
-        if (Objects.isNull(username)) {
-            throw new ExpenseTrackerException("Username is null!", ExpenseError.SERVER_ERROR);
-        }
+    public TransactionDTO given(TransactionDTO transactionDTO, String username) {
 
         Transaction transaction = TransactionEntityBuilder.build(username, transactionDTO);
         String transactionName = transaction.getTransactionName();
