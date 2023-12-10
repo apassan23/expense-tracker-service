@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CategoryEntityBuilder {
 
-    public static Category buildFromCategoryDTO(CategoryDTO categoryDTO) {
+    public static Category build(String username, CategoryDTO categoryDTO) {
         return Category.builder()
                 .categoryId(categoryDTO.getCategoryId())
+                .username(username)
                 .group(categoryDTO.getGroup())
                 .title(categoryDTO.getTitle())
                 .description(categoryDTO.getDescription())

@@ -1,0 +1,14 @@
+{
+  "name": "test.user",
+  "authorities": [
+    {
+      "authority": "ADMIN"
+    },
+    {
+      "authority": "USER"
+    }
+  ],
+  "isAuthenticated": true,
+  "isCredentialsNonExpired": true,
+  "accountNonExpired": true
+}

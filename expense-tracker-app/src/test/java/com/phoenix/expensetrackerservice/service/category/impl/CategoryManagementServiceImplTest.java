@@ -81,7 +81,7 @@ class CategoryManagementServiceImplTest {
     void createCategoryTest() {
         // prepare
         CategoryDTO categoryDTO = generateCategoryRequest();
-        Category category = CategoryEntityBuilder.buildFromCategoryDTO(categoryDTO);
+        Category category = CategoryEntityBuilder.build(USERNAME, categoryDTO);
 
         // setup security context
         setupSecurityContext();
@@ -117,7 +117,7 @@ class CategoryManagementServiceImplTest {
     void createCategoryWhenCategoryExistsTest() {
         // prepare
         CategoryDTO categoryDTO = generateCategoryRequest();
-        Category category = CategoryEntityBuilder.buildFromCategoryDTO(categoryDTO);
+        Category category = CategoryEntityBuilder.build(USERNAME, categoryDTO);
 
         setupSecurityContext();
 
@@ -139,7 +139,7 @@ class CategoryManagementServiceImplTest {
     void changeCategoryTest() {
         // prepare
         CategoryDTO categoryDTO = generateCategoryRequest();
-        Category category = CategoryEntityBuilder.buildFromCategoryDTO(categoryDTO);
+        Category category = CategoryEntityBuilder.build(USERNAME, categoryDTO);
 
         setupSecurityContext();
 
@@ -197,7 +197,7 @@ class CategoryManagementServiceImplTest {
     void changeCategoryWhenCategoryAlreadyExistsTest() {
         // prepare
         CategoryDTO categoryDTO = generateCategoryRequest();
-        Category category = CategoryEntityBuilder.buildFromCategoryDTO(categoryDTO);
+        Category category = CategoryEntityBuilder.build(USERNAME, categoryDTO);
 
         categoryDTO.setTitle(REQUEST_CATEGORY_TITLE);
 

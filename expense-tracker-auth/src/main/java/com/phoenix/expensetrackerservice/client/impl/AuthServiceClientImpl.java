@@ -35,7 +35,7 @@ public class AuthServiceClientImpl implements AuthServiceClient<RequestEntity<Vo
         } catch (ExpenseTrackerException e) {
             throw e;
         } catch (Exception e) {
-            throw new ExpenseTrackerException(e.getMessage(), ExpenseError.SERVER_ERROR);
+            throw new ExpenseTrackerException(e.getMessage(), ExpenseError.SERVER_ERROR, e.getCause());
         }
     }
 }

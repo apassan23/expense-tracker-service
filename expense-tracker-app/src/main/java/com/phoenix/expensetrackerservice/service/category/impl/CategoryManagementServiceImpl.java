@@ -46,7 +46,7 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
         if (categoryOptional.isPresent()) {
             throw new ExpenseTrackerBadRequestException(ExpenseError.CATEGORY_ALREADY_EXISTS.getDescription(), ExpenseError.CATEGORY_ALREADY_EXISTS);
         }
-        Category category = CategoryEntityBuilder.buildFromCategoryDTO(categoryDTO);
+        Category category = CategoryEntityBuilder.build(username, categoryDTO);
         return CategoryEntityBuilder.buildFromCategory(categoryDataService.save(category));
     }
 
@@ -70,7 +70,7 @@ public class CategoryManagementServiceImpl implements CategoryManagementService 
                 throw new ExpenseTrackerBadRequestException(ErrorConstants.CATEGORY_ALREADY_EXISTS_MESSAGE, ExpenseError.CATEGORY_ALREADY_EXISTS);
             }
         }
-        Category category = CategoryEntityBuilder.buildFromCategoryDTO(categoryDTO);
+        Category category = CategoryEntityBuilder.build(username, categoryDTO);
         return CategoryEntityBuilder.buildFromCategory(categoryDataService.save(category));
     }
 
