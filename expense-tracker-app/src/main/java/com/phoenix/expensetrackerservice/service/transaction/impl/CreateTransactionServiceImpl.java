@@ -1,6 +1,7 @@
 package com.phoenix.expensetrackerservice.service.transaction.impl;
 
 import com.phoenix.expensetrackerservice.entity.Transaction;
+import com.phoenix.expensetrackerservice.exception.ExpenseTrackerBadRequestException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerException;
 import com.phoenix.expensetrackerservice.exception.ExpenseTrackerNotFoundException;
 import com.phoenix.expensetrackerservice.exception.enums.ExpenseError;
@@ -14,6 +15,7 @@ import com.phoenix.expensetrackerservice.utils.AuthUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class CreateTransactionServiceImpl implements CreateTransactionService {
@@ -33,6 +35,13 @@ public class CreateTransactionServiceImpl implements CreateTransactionService {
         }
 
         Transaction transaction = TransactionEntityBuilder.build(username, transactionDTO);
+        String transactionName = transaction.getTransactionName();
+        Optional<Transaction> transactionOptional = transactionDataService.findByUsernameAndTransactionName(username, transactionName);
+
+        // check if transaction already exists
+        if (transactionOptional.isPresent()) {
+            throw new ExpenseTrackerBadRequestException(ExpenseError.TRANSACTION_CREATE_ALREADY_EXISTS.getDescription(), ExpenseError.TRANSACTION_CREATE_ALREADY_EXISTS);
+        }
 
         // check if category exists or not -> if not throw error
         String categoryId = transaction.getCategoryId();
