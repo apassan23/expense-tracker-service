@@ -45,6 +45,17 @@ jobs:
           minimum_coverage: 80
           fail_below_threshold: true
           publish_only_summary: true
+      - name: Jacoco Report to PR
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.6.1
+        with:
+          paths: coverage/target/site/jacoco-aggregate/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 80
+          min-coverage-changed-files: 80
+          debug-mode: true
+          continue-on-error: true
+          title: Coverage Summary
 
       - name: Set Coverage Output
         id: coverage-output
