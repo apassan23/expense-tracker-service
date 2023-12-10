@@ -88,7 +88,7 @@ class DeleteTransactionServiceImplTest {
 
         // mock
         when(transactionDataService.existsByTransactionIdAndUsername(TRANSACTION_ID, USERNAME)).thenReturn(Boolean.TRUE);
-        doNothing().when(transactionDataService).deleteByTransactionId(TRANSACTION_ID);
+        doNothing().when(transactionDataService).deleteByTransactionIdAndUsername(TRANSACTION_ID, USERNAME);
 
         // Action & Assert
         TransactionDTO response = deleteTransactionService.given(transactionDTO);

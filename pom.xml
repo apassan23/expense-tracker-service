@@ -20,13 +20,26 @@
         <module>expense-tracker-data</module>
         <module>expense-tracker-aop</module>
         <module>expense-tracker-auth</module>
+        <module>expense-tracker-caching</module>
         <module>expense-tracker-integration-tests</module>
         <module>coverage</module>
     </modules>
     <properties>
         <java.version>20</java.version>
         <apache.commons-io.version>1.3.2</apache.commons-io.version>
+        <snakeyml.version>2.0</snakeyml.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>${snakeyml.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

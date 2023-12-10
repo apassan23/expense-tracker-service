@@ -43,6 +43,11 @@
             <artifactId>expense-tracker-data</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.phoenix</groupId>
+            <artifactId>expense-tracker-caching</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

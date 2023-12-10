@@ -130,6 +130,6 @@ class TransactionDataServiceImplTest {
         doNothing().when(transactionRepository).deleteById(TRANSACTION_ID);
 
         // Action & assert
-        Assertions.assertDoesNotThrow(() -> transactionDataService.deleteByTransactionId(TRANSACTION_ID));
+        Assertions.assertDoesNotThrow(() -> transactionDataService.deleteByTransactionIdAndUsername(TRANSACTION_ID, USERNAME));
     }
 }
