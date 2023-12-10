@@ -1,0 +1,9 @@
+{
+  "transactionName": "Changed Transaction",
+  "amount": 1000,
+  "categoryId": "{{categoryId}}",
+  "transactionMonth": "December",
+  "account": "CASH",
+  "transactionType": "EXPENSE",
+  "notes": "notes"
+}
