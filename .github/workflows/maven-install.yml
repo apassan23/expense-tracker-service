@@ -81,7 +81,7 @@ jobs:
           echo "Changed Files coverage = ${{ needs.build.outputs.coverage_changed_files }}"
 
       - name: Fail PR if coverage is less than 80%
-        if: ${{ needs.build.outputs.coverage_changed_files < 80.0 }}
+        if: ${{ needs.build.outputs.coverage_changed_files && needs.build.outputs.coverage_changed_files < 80.0 }}
         uses: actions/github-script@v6
         with:
           script: |
